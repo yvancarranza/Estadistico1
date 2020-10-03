@@ -1,0 +1,72 @@
+
+.fondo2{
+  background-image: url(../imagenes/fondoblanco.jpg);
+ display: flex;
+ min-height: 100vh;	
+}
+
+.fondo{
+  background-image: url(../imagenes/back.jpg);
+ 	display: flex;
+ 	min-height: 100vh;	
+}
+
+form{
+margin-left: 400px;
+width: 450px;
+/*margin: auto;*/
+background: rgba(0,0,0,0.4);
+padding: 10px 20px;
+box-sizing: border-box;
+margin-top: 20px;
+border-radius: 7px;
+
+}
+
+input{
+width: 100%;
+margin-bottom: 20px;
+padding: 7px;
+box-sizing: border-box;
+font-size: 17px;
+
+}
+
+select{
+width: 100%;
+margin-bottom: 20px;
+padding: 7px;
+box-sizing: border-box;
+font-size: 17px;
+
+}
+
+  input[type="submit"], input[type="reset"]{
+  	background:#2DB904;
+  	position: center;
+  	width: 50%;
+  	border: 0;
+  	color: white;
+  	opacity: 0.8;
+  	cursor: pointer;
+  	border-radius: 20px;
+  	margin-bottom: 0;
+  }
+ .areadetexto{
+	width: 98%;
+	height: 200px;
+	
+}
+
+@media(max-width: 480px){
+	form{
+		width: 100%;
+	}
+
+}
+
+.label {
+  color: white;
+  padding: 8px;
+  font-family: Arial;
+}

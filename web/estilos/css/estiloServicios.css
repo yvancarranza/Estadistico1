@@ -1,0 +1,40 @@
+
+.servicios{
+    width: 90%;
+    float: left;
+    margin-top: 10px;
+    padding: 5px;
+    margin-left: 10%;
+    background-color: #EBFA7C;
+}
+
+.table {
+ border-collapse: collapse;
+  width: 90%;
+}
+
+.table th, td {
+  text-align: left;
+  padding: 8px;
+  width: 100px;
+}
+
+.table tr:nth-child(even){background-color: #EDFCB2;}
+.table tr:hover {background-color:#C2D9E1;}
+.table th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.busca {
+    width: 300px;
+    height: 55px;
+}
+
+table.table input[type="submit"]{
+    width: 300px;
+    height: 55px;
+    background-color: #e8491d;
+    color: #fff;
+}
+
