@@ -5,7 +5,6 @@ package entidad;
  * @author Grupo 4
  * Yvan Carranza
  * Guillermo Gonzales
- * Jhosep Garcia
  */
 public class Usuario {
     String idusuario;
