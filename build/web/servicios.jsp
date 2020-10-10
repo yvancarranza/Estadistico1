@@ -60,6 +60,15 @@
                     </a>
                 </li>
                 
+                <li>
+                    <a href="personal?metodo=carga">
+                        <i class="fa fa-font fa-2x"></i>
+                        <span class="nav-text">
+                           Importar Encuesta
+                        </span>
+                    </a>
+                </li>
+                
                 <%--    <li class="has-subnav">
                     <a href="personal?metodo=busca">
                     

@@ -145,11 +145,11 @@ public class usuario extends HttpServlet {
             //F = Profesional
             String url;
             url = "servicios.jsp";
-            if(tipodeusuario.equals("U"))
+            if(tipodeusuario.equals("Admin"))
             {                
                 String hola = Integer.toString(idpersona);
                 session.setAttribute("idpaciente",hola );
-                url = "serviciosPaciente.jsp";
+                url = "importarEncuesta.jsp";
             }else if(tipodeusuario.equals("F"))
                 {
                     String hola = Integer.toString(idpersona);

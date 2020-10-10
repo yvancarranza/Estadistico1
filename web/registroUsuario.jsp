@@ -20,10 +20,10 @@
                 src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.min.js">                  
         </script>
     </head>
-
-    <body>
+<body>
         <form action="personal" method="post" id ="personal">
         <input type ="hidden" name ="metodo" value ="registra">
+    
         <section>
             <a href="index.jsp"> <img id="img2" src="estilos/imagenes/home48px.png"></a>
             <center>

@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
     <head>      
-        <title>Servicios Administrador</title>
+        <title>Importar Encuestas</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width">
 	<meta name="description" content="pagina venta server">
@@ -103,17 +103,63 @@
         </nav>
        
          <aside class="servicios">
-			<div>
-				<h3>BIENVENIDO ADMINISTRADOR...</h3>
-				<p style="text-align: justify;">Aquí podras gestionar y dar mantenimiento a los usuarios registrados
-                                    </p>
-                                <p>También podrás editar tu perfil.</p>
+             
+             <div>
+                    <h2> Importar Archivos </h2>               
+                    <br>
+             </div>
+             
+            <div>
+                <form method="post" enctype="multipart/form-data"                                
+                                action= "${pageContext.request.contextPath}/encuesta?metodo=importarDiccionario">
+                    <table style="width:50%;border: 1px solid black">
+                        <tr>
+                            <td padding: 15px style="width:50%" colspan="2">
+                                Diccionario de Variables : 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td padding: 15px style="width:20%">
+                                Archivo CSV: 
+                            </td>
+                            <td padding: 15px style="width:50%">
+                                <input type ="file" name ="csvFile"  >                                
+                            </td>
+                            <td padding: 15px style="width:30%;text-align:right" >
+                                <input type ="submit" value="Importar">                                
+                            </td>
+                        </tr>
+                   </table>
+                </form>
+                <br>
+                 <form method="post" enctype="multipart/form-data"                                
+                                action= "${pageContext.request.contextPath}/encuesta?metodo=importarEncuesta">
+                    <table style="width:50%;border: 1px solid black">
+                        <tr>
+                            <td padding: 15px style="width:50%" colspan="2" >
+                                Encuestas : 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td padding: 15px style="width:20%">
+                                Archivo CSV : 
+                            </td>
+                            <td padding: 15px style="width:50%">
+                                <input type ="file" name ="csvFile"  >                                
+                            </td>
+                            <td padding: 15px style="width:30%;text-align:right" >
+                                <input type ="submit" value="Importar">                                
+                            </td>
+                        </tr>
+                   </table>
+                </form>
+                                          
                                 
-			</div>
+            </div>
 	</aside>
         
         </div>
-   
+        
        
         
     </body>
