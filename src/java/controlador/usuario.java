@@ -148,20 +148,19 @@ public class usuario extends HttpServlet {
             if(tipodeusuario.equals("Admin"))
             {                
                 String hola = Integer.toString(idpersona);
-                session.setAttribute("idpaciente",hola );
-                url = "importarEncuesta.jsp";
-            }else if(tipodeusuario.equals("F"))
+                session.setAttribute("idUsuario",hola );
+                url = "servicios.jsp";
+            }else if(tipodeusuario.equals("Personal"))
                 {
                     String hola = Integer.toString(idpersona);
-                    session.setAttribute("idprofesional",hola);
-                    url = "serviciosProfesional.jsp";   
-                    url = "solicitud?metodo=lista";
+                    session.setAttribute("idUsuario",hola);
+                    url = "menuUsuario.jsp";   
                 }
             else
             {
                 String hola = Integer.toString(idpersona);
-                session.setAttribute("idprofesional",hola);
-               url = "servicios.jsp";                    
+                session.setAttribute("idUsuario",hola);
+               url = "index.jsp";                    
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher(url);
             dispatcher.forward(request, response); 

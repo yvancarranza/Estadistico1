@@ -62,23 +62,24 @@
                         </span>
                     </a>
                 </li>
-                <%---     <li class="has-subnav">
-                    <a href="personal?metodo=busca">
-                        <i class="fa fa-laptop fa-2x"></i>
-                        <span class="nav-text">
-                            Editar
-                        </span>
-                    </a>                  
-                </li> ---%>
+             
                 
                 <li>
                     <a href="#">
                        <i class="fa fa-info fa-2x"></i>
                         <span class="nav-text">
-                            Vacio
+                            Vacio        
+               
+                <li>
+                    <a href="importarEncuesta.jsp">
+                        <i class="fa fa-font fa-2x"></i>
+                        <span class="nav-text">
+                           Importar Encuesta
                         </span>
                     </a>
                 </li>
+              
+    
             </ul>
 
             <ul class="logout">

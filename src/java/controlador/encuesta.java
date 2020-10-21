@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -96,6 +97,8 @@ public class encuesta extends HttpServlet {
          
         try{
             String csv = uploadFile(request,"csvFile");
+            request.setAttribute("fileupload",csv);
+            
       //      if(!csv.equalsIgnoreCase("csv"))
         //    {
           //       request.getRequestDispatcher("/importarEncuesta.jsp").forward(request, response);
@@ -238,7 +241,11 @@ public class encuesta extends HttpServlet {
             csvReader.close();           
         } catch(Exception e) {
             System.err.println(e.getMessage());      
+            request.getRequestDispatcher("/cargaFallida.jsp").forward(request, response);     
         }
+        RequestDispatcher rd = request.getRequestDispatcher("/cargaExitosa.jsp");
+
+        rd.forward(request, response);
      }
     
     
@@ -261,7 +268,7 @@ public class encuesta extends HttpServlet {
                                  + UPLOAD_DIR
                                  + File.separator
                                  + csv;            
-                
+                request.setAttribute("fileupload",csv);
                 ModelEncuesta modele = new ModelEncuesta();
                 modele.eliminaEncuestaMasivo();
                 int numreg;
@@ -303,7 +310,9 @@ public class encuesta extends HttpServlet {
                    csvReader.close();                   
          } catch(Exception e) {
             System.err.println(e.getMessage());      
+            request.getRequestDispatcher("/cargaFallida.jsp").forward(request, response);     
         }
+        request.getRequestDispatcher("/cargaExitosa.jsp").forward(request, response);     
      }
     
     

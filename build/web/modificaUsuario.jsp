@@ -59,53 +59,8 @@
                     </a>    
                 </li>
                 </ul>
-            </ul>    
-                <%--    <li>
-                    <a href="personal?metodo=lista">
-                        <i class="fa fa-font fa-2x"></i>
-                        <span class="nav-text">
-                           Lista Personal
-                        </span>
-                    </a>
-                </li>
-                <li>
-                   <a href="personal?metodo=lista">
-                       <i class="fa fa-table fa-2x"></i>
-                        <span class="nav-text">
-                            Lista Personal
-                        </span>
-                    </a>
-                </li>   
-               
-                     <li class="has-subnav">
-                    <a href="personal?metodo=busca">
-                        <i class="fa fa-laptop fa-2x"></i>
-                        <span class="nav-text">
-                            Editar
-                        </span>
-                    </a>                  
-                </li>   
+            </ul>   
                 
-                <li>
-                    <a href="#">
-                       <i class="fa fa-info fa-2x"></i>
-                        <span class="nav-text">
-                            Vacio
-                        </span>
-                    </a>
-                </li>
-            </ul>
-
-            <ul class="logout">
-                <li>
-                   <a href="#">
-                         <i class="fa fa-power-off fa-2x"></i>
-                        <span class="nav-text">
-                                Salir
-                        </span>
-                    </a>
-                </li>  
-            </ul> --%>
         </nav>
       
          <aside class="fondo" >

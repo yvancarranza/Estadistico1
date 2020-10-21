@@ -129,3 +129,346 @@ ALTER TABLE `tbpersonal`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+-- Tabla de Preguntas
+CREATE TABLE tbpregunta (
+  idpregunta   int(11) NOT NULL,
+  codpregunta   char(50) NOT NULL,
+  nompregunta  varchar(250) DEFAULT NULL,
+  tipocampo    char(50) NOT NULL,
+  formulario   char(50) NOT NULL,
+  fecregistro  datetime DEFAULT current_timestamp(),
+  fecmodifica  date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE tbpregunta
+  ADD PRIMARY KEY (idpregunta);
+  
+ALTER TABLE tbpregunta
+  MODIFY idpregunta int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+-- Tabla de Respuestas
+
+CREATE TABLE tbrespuesta (
+  idrespuesta      int(11) NOT NULL,
+  codpregunta  char(50) NOT NULL,
+  codrespuesta     char(50) NOT NULL,
+  nomrespuesta     varchar(250) DEFAULT NULL,
+  fecregistro  datetime DEFAULT current_timestamp(),
+  fecmodifica  date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE tbrespuesta
+  ADD PRIMARY KEY (idrespuesta);
+  
+ALTER TABLE tbrespuesta
+  MODIFY idrespuesta int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+-- Tabla de Encuestas
+
+CREATE TABLE tbencuesta (
+  idregistro   int(11) NOT NULL,
+  idencuesta   int(11) NOT NULL,
+  codpregunta  char(50) NOT NULL,
+  valrespuesta     char(50) NOT NULL,
+  fecregistro  datetime DEFAULT current_timestamp(),
+  fecmodifica  date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE tbencuesta
+  ADD PRIMARY KEY (idregistro);
+
+ALTER TABLE tbencuesta
+  MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+
+-- Tabla de Variables Finales
+CREATE TABLE tbvarfinal(
+	idregistro		int(11) NOT NULL,
+	codvarfin	char(15) NOT NULL,
+	nomvarfin	Varchar(50) NOT NULL,
+	operacion   CHAR(15) NOT NULL,
+	origen      CHAR(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE tbvarfinal
+  ADD PRIMARY KEY (idregistro);
+
+ALTER TABLE tbvarfinal
+  MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+INSERT INTO tbvarfinal(codvarfin,nomvarfin,operacion,origen) VALUES
+('ESTRES','Estrés','SUMA','BASE'),
+('ANSIEDAD','Ansiedad','SUMA','BASE'),
+('DEPRESION','Depresión','SUMA','BASE'),
+('GPD','GDP Total','SUMA','CALCULADA'),
+('RIESGO_SUICIDA','Riesgo Suicida','SUMA','BASE'),
+('TEPT','TEPT','SUMA','BASE'),
+('RISILIENCIA','Risiliencia de Block','SUMA','BASE'),
+('POBREZA','Nivel de Pobreza','SUMA','BASE');
+
+
+-- Tabla de Parametrizacion para Calculo
+CREATE TABLE tbparamcal(
+	idparam		int(11) NOT NULL,
+	codvarfin	char(15) NOT NULL,
+	codvarori	char(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE tbparamcal
+  ADD PRIMARY KEY (idparam);
+
+ALTER TABLE tbparamcal
+  MODIFY idparam int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+-- Parametrizar Estres
+INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
+('ESTRES','iii1a'),
+('ESTRES','iii1f'),
+('ESTRES','iii1h'),
+('ESTRES','iii1k'),
+('ESTRES','iii1l'),
+('ESTRES','iii1n'),
+('ESTRES','iii1r');
+
+-- Parametrizar Ansiedad
+INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
+('ANSIEDAD','iii1b'),
+('ANSIEDAD','iii1d'),
+('ANSIEDAD','iii1g'),
+('ANSIEDAD','iii1i'),
+('ANSIEDAD','iii1o'),
+('ANSIEDAD','iii1s'),
+('ANSIEDAD','iii1t');
+
+-- Parametrizar Ansiedad
+INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
+('DEPRESION','iii1c'),
+('DEPRESION','iii1e'),
+('DEPRESION','iii1j'),
+('DEPRESION','iii1m'),
+('DEPRESION','iii1p'),
+('DEPRESION','iii1q'),
+('DEPRESION','iii1u');
+
+-- Parametrizar GPD
+INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
+('GPD','ESTRES'),
+('GPD','ANSIEDAD'),
+('GPD','DEPRESION');
+
+-- Parametrizar Riesgo Suicida
+INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
+('RIESGO_SUICIDA','iii3a'),
+('RIESGO_SUICIDA','iii3b'),
+('RIESGO_SUICIDA','iii3c'),
+('RIESGO_SUICIDA','iii3d'),
+('RIESGO_SUICIDA','iii3e'),
+('RIESGO_SUICIDA','iii3f');
+
+-- Parametrizar Riesgo Suicida
+INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
+('TEPT','iii2b'),
+('TEPT','iii2c'),
+('TEPT','iii2d'),
+('TEPT','iii2e'),
+('TEPT','iii2f');
+
+-- Parametrizar Risiliencia Block
+INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
+('RISILIENCIA','iii10a'),
+('RISILIENCIA','iii10b'),
+('RISILIENCIA','iii10c'),
+('RISILIENCIA','iii10d'),
+('RISILIENCIA','iii10e'),
+('RISILIENCIA','iii10f'),
+('RISILIENCIA','iii10g'),
+('RISILIENCIA','iii10h'),
+('RISILIENCIA','iii10i'),
+('RISILIENCIA','iii10j'),
+('RISILIENCIA','iii10k'),
+('RISILIENCIA','iii10l'),
+('RISILIENCIA','iii10m'),
+('RISILIENCIA','iii10n');
+
+-- Tabla de Rango de Variable Final
+CREATE TABLE tbrangovar(
+	idregistro		int(11) NOT NULL,
+	codvarfin	char(15) NOT NULL,
+	rangoini	int(11) NOT NULL,
+	rangofin	int(11) NOT NULL,
+	desrango	VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE tbrangovar
+  ADD PRIMARY KEY (idregistro);
+
+ALTER TABLE tbrangovar
+  MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
+('ESTRES',0,14,'Normal'),
+('ESTRES',15,18,'Medio'),
+('ESTRES',19,25,'Moderado'),
+('ESTRES',26,33,'Severo'),
+('ESTRES',34,999,'Extremadamente Severo');
+
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
+('ANSIEDAD',0,7,'Normal'),
+('ANSIEDAD',8,9,'Medio'),
+('ANSIEDAD',10,14,'Moderado'),
+('ANSIEDAD',15,19,'Severo'),
+('ANSIEDAD',20,999,'Extremadamente Severo');
+
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
+('DEPRESION',0,9,'Normal'),
+('DEPRESION',10,13,'Medio'),
+('DEPRESION',14,20,'Moderado'),
+('DEPRESION',21,27,'Severo'),
+('DEPRESION',28,999,'Extremadamente Severo');
+
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
+('GPD',0,25,'Normal'),
+('GPD',26,34,'Medio'),
+('GPD',35,59,'Moderado'),
+('GPD',60,78,'Severo'),
+('GPD',79,999,'Extremadamente Severo');
+
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
+('RIESGO_SUICIDA',1,5,'Bajo'),
+('RIESGO_SUICIDA',6,9,'Moderado'),
+('RIESGO_SUICIDA',10,999,'Alto');
+
+
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
+('TEPT',0,2,'Bajo'),
+('TEPT',3,3,'Alta'),
+('TEPT',4,5,'Muy Alta');
+
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
+('POBREZA',1,1,'Pobre Extremo'),
+('POBREZA',2,2,'Pobre'),
+('POBREZA',3,4,'No Pobre');
+
+
+-- Tabla Consolidada
+CREATE TABLE facEncuesta(
+	idregistro		int(11) NOT NULL,
+	idencuesta		char(15) NOT NULL,
+	departamento    char(25) NOT NULL,
+	codvarfin		char(15) NOT NULL,
+	valresult		numeric(11,2) NOT NULL,
+	codresultado	char(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE facEncuesta
+  ADD PRIMARY KEY (idregistro);
+
+ALTER TABLE facEncuesta
+  MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+DELIMITER //
+CREATE PROCEDURE sp_generar_resultado()
+BEGIN
+  
+  DELETE FROM facEncuesta;
+  
+  
+  
+END //
+DELIMITER ;
+
+
+
+SELECT SUM(valrespuesta)
+FROM   tbencuesta
+WHERE  idencuesta =13 and CodPregunta IN (
+SELECT CodvarOri
+FROM   tbvarfinal TBF
+INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
+WHERE  TBF.Codvarfin = 'ESTRES')
+
+
+
+
+		SELECT @@Total = SUM(valrespuesta)
+		FROM   tbencuesta
+		WHERE  idencuesta = CUR_ENCUESTA.IDENCUESTA and CodPregunta IN (
+		SELECT CodvarOri
+		FROM   tbvarfinal TBF
+		INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
+		WHERE  TBF.Codvarfin = 'ESTRES')
+		
+		INSERT INTO facencuesta(idEncuesta,codvarfin,valresult)
+		VALUE(CUR_ENCUESTA.IDENCUESTA,'ESTRES',@@Total)
+
+
+
+   SET FOREIGN_KEY_CHECKS = ON;
+DELIMITER //
+CREATE PROCEDURE sp_generar_resultado()
+BEGIN
+
+  DECLARE var_idencuesta INT;
+  DECLARE finished INTEGER DEFAULT 0;
+  DECLARE finished2 INTEGER DEFAULT 0;
+  DECLARE var_suma INT DEFAULT 0;
+  DECLARE var_CodVariable CHAR(15);
+ 
+  
+  DECLARE CUR_ENCUESTA CURSOR FOR SELECT DISTINCT idencuesta FROM tbencuesta;
+  DECLARE CUR_VARIABLE CURSOR FOR SELECT CODVARFIN FROM tbvarfinal;
+
+  DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+
+DELETE FROM facEncuesta;
+		  
+  OPEN CUR_ENCUESTA;
+   -- LOOP PARA RECORRER LAS ENCUESTAS
+   getEncuesta: LOOP
+	FETCH CUR_ENCUESTA INTO var_idencuesta;
+
+		IF finished = 1 THEN 
+			 DBMS_OUTPUT.put_line("World!")
+			LEAVE getEncuesta;
+		END IF;
+				
+	
+			  
+		OPEN CUR_VARIABLE;
+		-- LOOP PARA RECORRER LAS VARIABLES RESULTANTES
+		getVariable: LOOP
+			FETCH CUR_VARIABLE INTO var_CodVariable;
+			  IF finished = 1 THEN
+			  	LEAVE getVariable;
+			  END IF;
+			  
+		   SET var_suma := (SELECT SUM(valrespuesta)
+			FROM   tbencuesta
+			WHERE  idencuesta = var_idencuesta and CodPregunta IN (
+			SELECT CodvarOri
+			FROM   tbvarfinal TBF
+			INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
+			WHERE  TBF.Codvarfin = var_CodVariable));
+		
+			IF(var_suma IS NOT NULL) THEN		
+					INSERT INTO facencuesta(IDEncuesta,codvarfin,valresult,codresultado) VALUES(var_idencuesta,'ESTRES',var_suma,'XXX');
+			END IF;
+		END LOOP getVariable;
+		CLOSE CUR_VARIABLE;
+		
+		
+	END LOOP getEncuesta;
+	CLOSE CUR_ENCUESTA;  
+END //
+DELIMITER ;
+
+
