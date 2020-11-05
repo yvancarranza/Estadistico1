@@ -206,7 +206,7 @@ INSERT INTO tbvarfinal(codvarfin,nomvarfin,operacion,origen) VALUES
 ('ESTRES','Estrés','SUMA','BASE'),
 ('ANSIEDAD','Ansiedad','SUMA','BASE'),
 ('DEPRESION','Depresión','SUMA','BASE'),
-('GPD','GDP Total','SUMA','CALCULADA'),
+('GPD','GDP Total','SUMA','BASE'),
 ('RIESGO_SUICIDA','Riesgo Suicida','SUMA','BASE'),
 ('TEPT','TEPT','SUMA','BASE'),
 ('RISILIENCIA','Risiliencia de Block','SUMA','BASE'),
@@ -258,9 +258,28 @@ INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
 
 -- Parametrizar GPD
 INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
-('GPD','ESTRES'),
-('GPD','ANSIEDAD'),
-('GPD','DEPRESION');
+('GPD','iii1a'),
+('GPD','iii1f'),
+('GPD','iii1h'),
+('GPD','iii1k'),
+('GPD','iii1l'),
+('GPD','iii1n'),
+('GPD','iii1r'),
+('GPD','iii1b'),
+('GPD','iii1d'),
+('GPD','iii1g'),
+('GPD','iii1i'),
+('GPD','iii1o'),
+('GPD','iii1s'),
+('GPD','iii1t'),
+('GPD','iii1c'),
+('GPD','iii1e'),
+('GPD','iii1j'),
+('GPD','iii1m'),
+('GPD','iii1p'),
+('GPD','iii1q'),
+('GPD','iii1u');
+
 
 -- Parametrizar Riesgo Suicida
 INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
@@ -358,117 +377,22 @@ INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
 
 
 -- Tabla Consolidada
-CREATE TABLE facEncuesta(
+CREATE TABLE tbReporte(
 	idregistro		int(11) NOT NULL,
 	idencuesta		char(15) NOT NULL,
 	departamento    char(25) NOT NULL,
+	sexo            CHAR(15) NOT NULL,
 	codvarfin		char(15) NOT NULL,
 	valresult		numeric(11,2) NOT NULL,
-	codresultado	char(15) NOT NULL
+	codresultado	char(15) NOT NULL,
+	porcentaje      DECIMAL(11,2) NOT NULL,
+	desviacion      DECIMAL(11,2) NOT NULL,
+	media           DECIMAL(11,2) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE facEncuesta
+ALTER TABLE tbReporte
   ADD PRIMARY KEY (idregistro);
 
-ALTER TABLE facEncuesta
+ALTER TABLE tbReporte
   MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-
-DELIMITER //
-CREATE PROCEDURE sp_generar_resultado()
-BEGIN
-  
-  DELETE FROM facEncuesta;
-  
-  
-  
-END //
-DELIMITER ;
-
-
-
-SELECT SUM(valrespuesta)
-FROM   tbencuesta
-WHERE  idencuesta =13 and CodPregunta IN (
-SELECT CodvarOri
-FROM   tbvarfinal TBF
-INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
-WHERE  TBF.Codvarfin = 'ESTRES')
-
-
-
-
-		SELECT @@Total = SUM(valrespuesta)
-		FROM   tbencuesta
-		WHERE  idencuesta = CUR_ENCUESTA.IDENCUESTA and CodPregunta IN (
-		SELECT CodvarOri
-		FROM   tbvarfinal TBF
-		INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
-		WHERE  TBF.Codvarfin = 'ESTRES')
-		
-		INSERT INTO facencuesta(idEncuesta,codvarfin,valresult)
-		VALUE(CUR_ENCUESTA.IDENCUESTA,'ESTRES',@@Total)
-
-
-
-   SET FOREIGN_KEY_CHECKS = ON;
-DELIMITER //
-CREATE PROCEDURE sp_generar_resultado()
-BEGIN
-
-  DECLARE var_idencuesta INT;
-  DECLARE finished INTEGER DEFAULT 0;
-  DECLARE finished2 INTEGER DEFAULT 0;
-  DECLARE var_suma INT DEFAULT 0;
-  DECLARE var_CodVariable CHAR(15);
- 
-  
-  DECLARE CUR_ENCUESTA CURSOR FOR SELECT DISTINCT idencuesta FROM tbencuesta;
-  DECLARE CUR_VARIABLE CURSOR FOR SELECT CODVARFIN FROM tbvarfinal;
-
-  DECLARE CONTINUE HANDLER 
-        FOR NOT FOUND SET finished = 1;
-
-DELETE FROM facEncuesta;
-		  
-  OPEN CUR_ENCUESTA;
-   -- LOOP PARA RECORRER LAS ENCUESTAS
-   getEncuesta: LOOP
-	FETCH CUR_ENCUESTA INTO var_idencuesta;
-
-		IF finished = 1 THEN 
-			 DBMS_OUTPUT.put_line("World!")
-			LEAVE getEncuesta;
-		END IF;
-				
-	
-			  
-		OPEN CUR_VARIABLE;
-		-- LOOP PARA RECORRER LAS VARIABLES RESULTANTES
-		getVariable: LOOP
-			FETCH CUR_VARIABLE INTO var_CodVariable;
-			  IF finished = 1 THEN
-			  	LEAVE getVariable;
-			  END IF;
-			  
-		   SET var_suma := (SELECT SUM(valrespuesta)
-			FROM   tbencuesta
-			WHERE  idencuesta = var_idencuesta and CodPregunta IN (
-			SELECT CodvarOri
-			FROM   tbvarfinal TBF
-			INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
-			WHERE  TBF.Codvarfin = var_CodVariable));
-		
-			IF(var_suma IS NOT NULL) THEN		
-					INSERT INTO facencuesta(IDEncuesta,codvarfin,valresult,codresultado) VALUES(var_idencuesta,'ESTRES',var_suma,'XXX');
-			END IF;
-		END LOOP getVariable;
-		CLOSE CUR_VARIABLE;
-		
-		
-	END LOOP getEncuesta;
-	CLOSE CUR_ENCUESTA;  
-END //
-DELIMITER ;
 
 

@@ -1,55 +1,3 @@
--- Tabla de Preguntas
-CREATE TABLE tbpregunta (
-  idpregunta   int(11) NOT NULL,
-  codpregunta   char(50) NOT NULL,
-  nompregunta  varchar(250) DEFAULT NULL,
-  tipocampo    char(50) NOT NULL,
-  formulario   char(50) NOT NULL,
-  fecregistro  datetime DEFAULT current_timestamp(),
-  fecmodifica  date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE tbpregunta
-  ADD PRIMARY KEY (idpregunta);
-  
-ALTER TABLE tbpregunta
-  MODIFY idpregunta int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
--- Tabla de Respuestas
-
-CREATE TABLE tbrespuesta (
-  idrespuesta      int(11) NOT NULL,
-  codpregunta  char(50) NOT NULL,
-  codrespuesta     char(50) NOT NULL,
-  nomrespuesta     varchar(250) DEFAULT NULL,
-  fecregistro  datetime DEFAULT current_timestamp(),
-  fecmodifica  date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE tbrespuesta
-  ADD PRIMARY KEY (idrespuesta);
-  
-ALTER TABLE tbrespuesta
-  MODIFY idrespuesta int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-
--- Tabla de Encuestas
-
-CREATE TABLE tbencuesta (
-  idregistro   int(11) NOT NULL,
-  idencuesta   int(11) NOT NULL,
-  codpregunta  char(50) NOT NULL,
-  valrespuesta     char(50) NOT NULL,
-  fecregistro  datetime DEFAULT current_timestamp(),
-  fecmodifica  date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE tbencuesta
-  ADD PRIMARY KEY (idregistro);
-
-ALTER TABLE tbencuesta
-  MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
 
 
 	SELECT B1.idencuesta,b1.codpregunta,b2.nompregunta,b1.valrspta,b3.nomrespuesta
@@ -73,67 +21,101 @@ ALTER TABLE tbencuesta
 	order by p1.codpregunta,r1.codrespuesta
 	
 	
+
+CREATE PROCEDURE sp_generar_resultado()
+BEGIN
+  
+  DELETE FROM facEncuesta;
+  
+  
+  
+END //
+DELIMITER ;
+
+
+
+SELECT SUM(valrespuesta)
+FROM   tbencuesta
+WHERE  idencuesta =13 and CodPregunta IN (
+SELECT CodvarOri
+FROM   tbvarfinal TBF
+INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
+WHERE  TBF.Codvarfin = 'ESTRES')
+
+
+
+
+		SELECT @@Total = SUM(valrespuesta)
+		FROM   tbencuesta
+		WHERE  idencuesta = CUR_ENCUESTA.IDENCUESTA and CodPregunta IN (
+		SELECT CodvarOri
+		FROM   tbvarfinal TBF
+		INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
+		WHERE  TBF.Codvarfin = 'ESTRES')
+		
+		INSERT INTO facencuesta(idEncuesta,codvarfin,valresult)
+		VALUE(CUR_ENCUESTA.IDENCUESTA,'ESTRES',@@Total)
+
+
+
+   SET FOREIGN_KEY_CHECKS = ON;
+DELIMITER //
+CREATE PROCEDURE sp_generar_resultado()
+BEGIN
+
+  DECLARE var_idencuesta INT;
+  DECLARE finished INTEGER DEFAULT 0;
+  DECLARE finished2 INTEGER DEFAULT 0;
+  DECLARE var_suma INT DEFAULT 0;
+  DECLARE var_CodVariable CHAR(15);
+ 
+  
+  DECLARE CUR_ENCUESTA CURSOR FOR SELECT DISTINCT idencuesta FROM tbencuesta;
+  DECLARE CUR_VARIABLE CURSOR FOR SELECT CODVARFIN FROM tbvarfinal;
+
+  DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+
+DELETE FROM facEncuesta;
+		  
+  OPEN CUR_ENCUESTA;
+   -- LOOP PARA RECORRER LAS ENCUESTAS
+   getEncuesta: LOOP
+	FETCH CUR_ENCUESTA INTO var_idencuesta;
+
+		IF finished = 1 THEN 
+			LEAVE getEncuesta;
+		END IF;
+				
 	
-	select * from tbencuesta where idencuesta = 2
-	
-	
-30100
+			  
+		OPEN CUR_VARIABLE;
+		-- LOOP PARA RECORRER LAS VARIABLES RESULTANTES
+		getVariable: LOOP
+			FETCH CUR_VARIABLE INTO var_CodVariable;
+			  IF finished = 1 THEN
+			  		SET finished = 0;
+			  	    LEAVE getVariable;
+			  END IF;
+			  
+		   SET var_suma := (SELECT SUM(valrespuesta)
+			FROM   tbencuesta
+			WHERE  idencuesta = var_idencuesta and CodPregunta IN (
+			SELECT CodvarOri
+			FROM   tbvarfinal TBF
+			INNER JOIN tbparamcal PCA ON (TBF.CodVarFin = PCA.CodVarFin)
+			WHERE  TBF.Codvarfin = var_CodVariable));
+		
+			IF(var_suma IS NOT NULL) THEN		
+					INSERT INTO facencuesta(IDEncuesta,codvarfin,valresult,codresultado) VALUES(var_idencuesta,var_CodVariable,var_suma,'XXX');
+			END IF;
+		END LOOP getVariable;
+		CLOSE CUR_VARIABLE;
+		
+		
+	END LOOP getEncuesta;
+	CLOSE CUR_ENCUESTA;  
+END //
+DELIMITER ;
 
 
-
-      
-            
-            // FIN DE IMPORTACION
-            
-    archCSV = "D:\\DataVariables.csv";
-    csvReader = new CSVReader(new FileReader(archCSV));
-    fila = null;
-    numreg = 0;
-    String Preguntas[] =null;
-    while((fila = csvReader.readNext()) != null){           
-        if(numreg == 0){
-            Preguntas = fila;
-            numreg++;
-          }
-        else {            
-                int idencuesta = Integer.parseInt(fila[0]);
-                for(int ifila = 1;ifila<fila.length;ifila++ ){                    
-                    PreparedStatement pstm1;
-                    String valrspta;
-                    String codpregunta;
-                    valrspta = fila[ifila].trim();
-                    codpregunta = Preguntas[ifila].trim();
-                    if(!valrspta.isEmpty())  {
-                        String sql1 = "insert into tbencuesta(idregistro,idencuesta,codpregunta,valrspta)" + 
-                             " values(null,?,?,?)";            
-                        try
-                           {
-                                pstm1 = cnn.prepareStatement(sql1);
-                                pstm1.setInt(1, idencuesta);
-                                pstm1.setString(2,codpregunta);
-                                pstm1.setString(3,valrspta);
-                                salida = pstm1.executeUpdate();
-                           }
-                        catch (SQLException ex)
-                            {
-
-                               System.out.println(ex.toString());
-                               System.out.println(valrspta);
-                            }  
-                    }
-                }                   
-                 numreg++;
-                }            
-           }
-           csvReader.close();
-           try {
-                cnn.close();
-               }
-           catch (SQLException ex) {
-            Logger.getLogger(encuesta.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-            
-            
-            ///

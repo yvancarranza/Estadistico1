@@ -76,7 +76,14 @@
                         </span>
                     </a>
                 </li>
-                
+                <li>
+                    <a href="reporteporsexo.jsp">
+                        <i class="fa fa-font fa-2x"></i>
+                        <span class="nav-text">
+                           Reporte x Sexo
+                        </span>
+                    </a>
+                </li>
                                         
           
             </ul>

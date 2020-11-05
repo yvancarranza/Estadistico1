@@ -141,7 +141,9 @@ public class personal extends HttpServlet {
                    obju.setIdpersona(paci2.getIdpersonal());
                  ModelUsuario modelu = new ModelUsuario();
                  modelu.insertaUsuario(obju);         
-                 RequestDispatcher dispatcher = request.getRequestDispatcher("listadoUsuarios.jsp");
+                 //RequestDispatcher dispatcher = request.getRequestDispatcher("listadoUsuarios.jsp");
+                 RequestDispatcher dispatcher = request.getRequestDispatcher("personal?metodo=lista");
+                 
                dispatcher.forward(request, response);        
              }
          }   
@@ -207,7 +209,8 @@ public class personal extends HttpServlet {
          
         ModelPersonal model = new ModelPersonal();         
         model.actualizaPersonal(objp);
-         request.getRequestDispatcher("/listadoUsuarios.jsp").forward(request, response);
+        //RequestDispatcher dispatcher = request.getRequestDispatcher("personal?metodo=lista");
+         request.getRequestDispatcher("personal?metodo=lista").forward(request, response);
                 
      }
 
