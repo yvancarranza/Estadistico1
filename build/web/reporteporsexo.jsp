@@ -86,8 +86,7 @@
 
                
                <br>
-               <br>
-                <br>
+            
                  
             <form name ="reporte2" action = "reporte">
                  <label> SINDROMES </label>
@@ -109,8 +108,9 @@
                
         <aside class="servicios">
             <div>
-                <h3>REPORTE GENERADO </h3>
-                <br>                                
+                <h3> <center>REPORTE GENERADO</center> </h3>
+                
+                <h4>${variable_analisis}</h4>
                 <table class="table">
                     <tr>
                         <th>Escala/Sexo</th> 
@@ -119,19 +119,77 @@
                         <th>Total</th> 
                     </tr>
                 <%        
+                    double total_masculino = 0.00;
+                    double total_femenino = 0.00;
+                    double total_grupo    = 0.00;
+                    
+                    double porcen_masculino = 0.00;
+                    double porcen_femenino = 0.00;
+                    double porcen_grupo = 0.00;                    
+
                     List<Reporte> data = (List<Reporte>)request.getAttribute("data_reporte_sexo");
                     if(data!=null){
                        for(Reporte x:data){
+                           if(x.getCodresultado().equalsIgnoreCase("TOTAL") )
+                           {
+                               total_masculino = x.getCta_masculino();
+                               total_femenino = x.getCta_femenino();
+                               total_grupo    = x.getCta_total();
+                               
+                            %>
+                                <tr>
+                                    <td> TOTAL UNIDADES </td>
+                                    <td> <%= x.getCta_masculino() %> </td>
+                                    <td> <%= x.getCta_femenino() %> </td>
+                                    <td> <%= x.getCta_total() %> </td>
+                                </tr>        
+                            <%
+                           }
+                           else
+                           {
+                                
+                                porcen_masculino = (x.getCta_masculino().doubleValue()/total_grupo)*100;
+                                porcen_femenino  = (x.getCta_femenino().doubleValue()/total_grupo)*100;
+                                porcen_grupo     = (x.getCta_total().doubleValue()/total_grupo)*100;
+
+                               if(x.getCodvarfin().equalsIgnoreCase("RESILIENCIA")) {
                 %>
                             
                     <tr>
                         <td> <%= x.getCodresultado() %> </td>
-                        <td> <%= x.getCta_masculino() %> </td>
-                        <td> <%= x.getCta_femenino() %> </td>
-                        <td> <%= x.getCta_total() %> </td>
+                        <td> <%= String.format("%.2f", x.getCta_masculino().doubleValue()) %>  </td>
+                        <td> <%= String.format("%.2f",x.getCta_femenino().doubleValue()) %>  </td>
+                        <td> <%= String.format("%.2f",x.getCta_total().doubleValue()) %>  </td>
                     </tr>
                 <%    
-                            }             
+                    }
+                    else {
+                            
+                 %>
+                  <tr>
+                        <td> <%= x.getCodresultado() %> </td>
+                        <td> <%= String.format("%.2f",porcen_masculino) %> % </td>
+                        <td> <%= String.format("%.2f",porcen_femenino) %> % </td>
+                        <td> <%= String.format("%.2f",porcen_grupo) %> % </td>
+                    </tr>
+                 
+                 <%
+                            
+                            }
+                            }
+      
+                    }
+
+                        porcen_masculino = (Double.valueOf(total_masculino)/total_grupo)*100;
+                        porcen_femenino  = (Double.valueOf(total_femenino)/total_grupo)*100;                        
+                %>
+                    <tr>
+                        <th> TOTAL PORCENTAJE </th>
+                        <th> <%= String.format("%.2f",porcen_masculino) %> % </th>
+                        <th> <%= String.format("%.2f",porcen_femenino) %> % </th>                        
+                        <th> 100 % </th>
+                    </tr>
+                <%
                     }
                 %>
                 </table>

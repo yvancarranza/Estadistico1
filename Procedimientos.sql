@@ -20,6 +20,7 @@ BEGIN
   DECLARE var_departamento CHAR(20);
   DECLARE var_duplicar CHAR(2);
   DECLARE var_sexo CHAR(20);
+  DECLARE var_orden  INT;
   DECLARE CUR_ENCUESTA CURSOR FOR SELECT DISTINCT idencuesta FROM tbencuesta;
   DECLARE CUR_VARIABLE CURSOR FOR SELECT CODVARFIN,OPERACION,ORIGEN,DUPLICAR FROM tbvarfinal;
 
@@ -66,15 +67,23 @@ DELETE FROM tbreporte;
 					SET Var_Resultado := (SELECT desrango FROM tbrangovar 
 												WHERE codvarfin = var_CodVariable  AND 
 												var_suma >= rangoini AND var_suma <= rangofin);
+					SET Var_Orden := (SELECT orden FROM tbrangovar 
+												WHERE codvarfin = var_CodVariable  AND 
+												var_suma >= rangoini AND var_suma <= rangofin);
+												
 					IF(Var_Resultado IS NULL) THEN		
 						 SET Var_Resultado := 'OUT_RANGE';
+					END IF;
+					
+					IF(Var_Orden IS NULL) THEN		
+						 SET Var_Orden := 999;
 					END IF;
 
 					SET var_porcentaje:= 0;
 					SET var_desviacion:= 0;
 					SET var_media := 0;
 					
-					IF(var_CodVariable = 'RISILIENCIA') THEN
+					IF(var_CodVariable = 'RESILIENCIA') THEN
 						 SET var_porcentaje:= ((var_suma - 14)/56)*100;
 						 SET var_media := var_suma/14;
 					 
@@ -101,8 +110,8 @@ DELETE FROM tbreporte;
 													WHERE enc.codpregunta = 'sex' AND enc.idencuesta = var_idencuesta);
 
 					
-					INSERT INTO tbreporte(IDEncuesta,departamento,sexo,codvarfin,suma,codresultado,porcentaje,media,desviacion) 
-					VALUES(var_idencuesta,var_departamento,var_sexo,var_CodVariable,var_suma,Var_Resultado,var_porcentaje,var_media,var_desviacion);
+					INSERT INTO tbreporte(IDEncuesta,departamento,sexo,codvarfin,suma,codresultado,porcentaje,media,desviacion,orden) 
+					VALUES(var_idencuesta,var_departamento,var_sexo,var_CodVariable,var_suma,Var_Resultado,var_porcentaje,var_media,var_desviacion,var_orden);
 			END IF;
 		END LOOP getVariable;
 		CLOSE CUR_VARIABLE;

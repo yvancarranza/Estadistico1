@@ -65,6 +65,7 @@ public class reporte extends HttpServlet {
         String variable = request.getParameter("Variable");  
         String bver = request.getParameter("btnver");  
         String bpdf = request.getParameter("btnpdf");  
+        request.setAttribute("variable_analisis", "Variable Analizada: " + variable);
         if(bver != null) {
             ModelReporte mreporte = new ModelReporte();
             List<Reporte> reportes =  mreporte.ListarReporte1(variable);
@@ -101,6 +102,13 @@ public class reporte extends HttpServlet {
                 documento.add(par1);
           
                 
+                
+          
+                Image imagenes = Image.getInstance("D:\\UTP\\CICLO VII - AGOSTO 2020\\Integrador 2\\GRUPO_01\\Estadistico\\web\\estilos\\imagenes\\logo1.png");
+                imagenes.setAlignment(Element.ALIGN_CENTER);
+                imagenes.scaleToFit(100,100);
+                documento.add(imagenes);
+                
                 Paragraph par2 = new Paragraph();
                 Font fontdescripcion = new Font(Font.FontFamily.TIMES_ROMAN,12,Font.NORMAL,BaseColor.BLACK);
                 par2.add(new Phrase("Variables de Análisis : " + variable,fontdescripcion));
@@ -109,29 +117,52 @@ public class reporte extends HttpServlet {
                 par2.add(new Phrase(Chunk.NEWLINE));
                 documento.add(par2);
             
-          
-                Image imagenes = Image.getInstance("D:\\UTP\\CICLO VII - AGOSTO 2020\\Integrador 2\\GRUPO_01\\Estadistico\\web\\estilos\\imagenes\\logo1.png");
-                imagenes.setAlignment(Element.ALIGN_CENTER);
-                imagenes.scaleToFit(100,100);
-                documento.add(imagenes);
                 
                 PdfPTable tabla = new PdfPTable(4);
-                PdfPCell  celda1 = new PdfPCell(new Paragraph("Escala",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.RED)));
-                PdfPCell  celda2 = new PdfPCell(new Paragraph("Masculino",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.RED)));
-                PdfPCell  celda3 = new PdfPCell(new Paragraph("Femenino",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.RED)));
-                PdfPCell  celda4 = new PdfPCell(new Paragraph("Total",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.RED)));
+                PdfPCell  celda1 = new PdfPCell(new Paragraph("Escala",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.BLUE)));
+                PdfPCell  celda2 = new PdfPCell(new Paragraph("Masculino",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.BLUE)));
+                PdfPCell  celda3 = new PdfPCell(new Paragraph("Femenino",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.BLUE)));
+                PdfPCell  celda4 = new PdfPCell(new Paragraph("Total",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.BLUE)));
                 tabla.addCell(celda1);
                 tabla.addCell(celda2);
                 tabla.addCell(celda3);
                 tabla.addCell(celda4);
+                int posicion = 0;
+                int total_masculino = 0;
+                int total_femenino = 0;
+                int total_grupo  = 0;
+                
+                double porcen_masculino = 0.00;
+                double porcen_femenino = 0.00;
+                double porcen_grupo = 0.00;
                 
                 for (Reporte reporte : reportes) {
-                       
+                     if(reporte.getCodresultado().equalsIgnoreCase("TOTAL")) {
+                         total_masculino = reporte.getCta_masculino();
+                         total_femenino = reporte.getCta_femenino();
+                         total_grupo    = reporte.getCta_total();
+                     }
+                     else{
+                         porcen_masculino = (reporte.getCta_masculino().doubleValue()/total_grupo)*100;
+                         porcen_femenino  = (reporte.getCta_femenino().doubleValue()/total_grupo)*100;
+                         porcen_grupo     = (reporte.getCta_total().doubleValue()/total_grupo)*100;
+                         
                      tabla.addCell(reporte.getCodresultado());
-                     tabla.addCell(reporte.getCta_masculino().toString());
-                     tabla.addCell(reporte.getCta_femenino().toString());
-                     tabla.addCell(reporte.getCta_total().toString());
+                     tabla.addCell( String.format("%.2f", porcen_masculino) + " %");
+                     tabla.addCell(String.format("%.2f", porcen_femenino) + " %");
+                     tabla.addCell(String.format("%.2f", porcen_grupo) + " %");
+                     }
                 } 
+                
+                porcen_masculino = (Double.valueOf(total_masculino)/total_grupo)*100;
+                porcen_femenino = (Double.valueOf(total_femenino)/total_grupo)*100;
+                porcen_grupo = 100.00;
+                
+                     tabla.addCell("TOTAL " );
+                     tabla.addCell( String.format("%.2f",porcen_masculino) + " %");
+                     tabla.addCell(String.format("%.2f",porcen_femenino) + " %");
+                     tabla.addCell(String.format("%.2f",porcen_grupo) + " %");
+                
                 
                 documento.add(tabla);
                     documento.close();

@@ -191,7 +191,8 @@ CREATE TABLE tbvarfinal(
 	codvarfin	char(15) NOT NULL,
 	nomvarfin	Varchar(50) NOT NULL,
 	operacion   CHAR(15) NOT NULL,
-	origen      CHAR(15) NOT NULL
+	origen      CHAR(15) NOT NULL,
+	duplicar    CHAR(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -202,15 +203,15 @@ ALTER TABLE tbvarfinal
   MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 
-INSERT INTO tbvarfinal(codvarfin,nomvarfin,operacion,origen) VALUES
-('ESTRES','Estrés','SUMA','BASE'),
-('ANSIEDAD','Ansiedad','SUMA','BASE'),
-('DEPRESION','Depresión','SUMA','BASE'),
-('GPD','GDP Total','SUMA','BASE'),
-('RIESGO_SUICIDA','Riesgo Suicida','SUMA','BASE'),
-('TEPT','TEPT','SUMA','BASE'),
-('RISILIENCIA','Risiliencia de Block','SUMA','BASE'),
-('POBREZA','Nivel de Pobreza','SUMA','BASE');
+INSERT INTO tbvarfinal(codvarfin,nomvarfin,operacion,origen,duplicar) VALUES
+('ESTRES','Estrés','SUMA','BASE','SI'),
+('ANSIEDAD','Ansiedad','SUMA','BASE','SI'),
+('DEPRESION','Depresión','SUMA','BASE','SI'),
+('GPD','GDP Total','SUMA','BASE','SI'),
+('RIESGO_SUICIDA','Riesgo Suicida','SUMA','BASE','NO'),
+('TEPT','TEPT','SUMA','BASE','NO'),
+('RESILIENCIA','RESILIENCIA de Block','SUMA','BASE','NO'),
+('POBREZA','Nivel de Pobreza','SUMA','BASE','NO');
 
 
 -- Tabla de Parametrizacion para Calculo
@@ -298,22 +299,22 @@ INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
 ('TEPT','iii2e'),
 ('TEPT','iii2f');
 
--- Parametrizar Risiliencia Block
+-- Parametrizar RESILIENCIA Block
 INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
-('RISILIENCIA','iii10a'),
-('RISILIENCIA','iii10b'),
-('RISILIENCIA','iii10c'),
-('RISILIENCIA','iii10d'),
-('RISILIENCIA','iii10e'),
-('RISILIENCIA','iii10f'),
-('RISILIENCIA','iii10g'),
-('RISILIENCIA','iii10h'),
-('RISILIENCIA','iii10i'),
-('RISILIENCIA','iii10j'),
-('RISILIENCIA','iii10k'),
-('RISILIENCIA','iii10l'),
-('RISILIENCIA','iii10m'),
-('RISILIENCIA','iii10n');
+('RESILIENCIA','iii10a'),
+('RESILIENCIA','iii10b'),
+('RESILIENCIA','iii10c'),
+('RESILIENCIA','iii10d'),
+('RESILIENCIA','iii10e'),
+('RESILIENCIA','iii10f'),
+('RESILIENCIA','iii10g'),
+('RESILIENCIA','iii10h'),
+('RESILIENCIA','iii10i'),
+('RESILIENCIA','iii10j'),
+('RESILIENCIA','iii10k'),
+('RESILIENCIA','iii10l'),
+('RESILIENCIA','iii10m'),
+('RESILIENCIA','iii10n');
 
 -- Tabla de Rango de Variable Final
 CREATE TABLE tbrangovar(
@@ -321,7 +322,8 @@ CREATE TABLE tbrangovar(
 	codvarfin	char(15) NOT NULL,
 	rangoini	int(11) NOT NULL,
 	rangofin	int(11) NOT NULL,
-	desrango	VARCHAR(50) NOT NULL
+	desrango	VARCHAR(50) NOT NULL,
+	orden       int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 ALTER TABLE tbrangovar
@@ -331,49 +333,50 @@ ALTER TABLE tbrangovar
   MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 
-INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
-('ESTRES',0,14,'Normal'),
-('ESTRES',15,18,'Medio'),
-('ESTRES',19,25,'Moderado'),
-('ESTRES',26,33,'Severo'),
-('ESTRES',34,999,'Extremadamente Severo');
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango,orden) VALUES
+('ESTRES',0,14,'Normal',1),
+('ESTRES',15,18,'Medio',2),
+('ESTRES',19,25,'Moderado',3),
+('ESTRES',26,33,'Severo',4),
+('ESTRES',34,999,'Extremadamente Severo',5);
 
-INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
-('ANSIEDAD',0,7,'Normal'),
-('ANSIEDAD',8,9,'Medio'),
-('ANSIEDAD',10,14,'Moderado'),
-('ANSIEDAD',15,19,'Severo'),
-('ANSIEDAD',20,999,'Extremadamente Severo');
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango,orden) VALUES
+('ANSIEDAD',0,7,'Normal',1),
+('ANSIEDAD',8,9,'Medio',2),
+('ANSIEDAD',10,14,'Moderado',3),
+('ANSIEDAD',15,19,'Severo',4),
+('ANSIEDAD',20,999,'Extremadamente Severo',5);
 
-INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
-('DEPRESION',0,9,'Normal'),
-('DEPRESION',10,13,'Medio'),
-('DEPRESION',14,20,'Moderado'),
-('DEPRESION',21,27,'Severo'),
-('DEPRESION',28,999,'Extremadamente Severo');
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango,orden) VALUES
+('DEPRESION',0,9,'Normal',1),
+('DEPRESION',10,13,'Medio',2),
+('DEPRESION',14,20,'Moderado',3),
+('DEPRESION',21,27,'Severo',4),
+('DEPRESION',28,999,'Extremadamente Severo',5);
 
-INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
-('GPD',0,25,'Normal'),
-('GPD',26,34,'Medio'),
-('GPD',35,59,'Moderado'),
-('GPD',60,78,'Severo'),
-('GPD',79,999,'Extremadamente Severo');
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango,orden) VALUES
+('GPD',0,25,'Normal',1),
+('GPD',26,34,'Medio',2),
+('GPD',35,59,'Moderado',3),
+('GPD',60,78,'Severo',4),
+('GPD',79,999,'Extremadamente Severo',5);
 
-INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
-('RIESGO_SUICIDA',1,5,'Bajo'),
-('RIESGO_SUICIDA',6,9,'Moderado'),
-('RIESGO_SUICIDA',10,999,'Alto');
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango,orden) VALUES
+('RIESGO_SUICIDA',0,0,'Ninguno',1),
+('RIESGO_SUICIDA',1,5,'Bajo',2),
+('RIESGO_SUICIDA',6,9,'Moderado',3),
+('RIESGO_SUICIDA',10,999,'Alto',4);
 
 
-INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
-('TEPT',0,2,'Bajo'),
-('TEPT',3,3,'Alta'),
-('TEPT',4,5,'Muy Alta');
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango,orden) VALUES
+('TEPT',0,2,'Bajo',1),
+('TEPT',3,3,'Alta',2),
+('TEPT',4,5,'Muy Alta',3);
 
-INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango) VALUES
-('POBREZA',1,1,'Pobre Extremo'),
-('POBREZA',2,2,'Pobre'),
-('POBREZA',3,4,'No Pobre');
+INSERT INTO tbrangovar(codvarfin,rangoini,rangofin,desrango,orden) VALUES
+('POBREZA',1,1,'Pobre Extremo',1),
+('POBREZA',2,2,'Pobre',2),
+('POBREZA',3,4,'No Pobre',3);
 
 
 -- Tabla Consolidada
@@ -383,11 +386,12 @@ CREATE TABLE tbReporte(
 	departamento    char(25) NOT NULL,
 	sexo            CHAR(15) NOT NULL,
 	codvarfin		char(15) NOT NULL,
-	valresult		numeric(11,2) NOT NULL,
+	suma		    numeric(11,2) NOT NULL,
 	codresultado	char(15) NOT NULL,
 	porcentaje      DECIMAL(11,2) NOT NULL,
 	desviacion      DECIMAL(11,2) NOT NULL,
 	media           DECIMAL(11,2) NOT NULL,
+	orden           int (5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 ALTER TABLE tbReporte
   ADD PRIMARY KEY (idregistro);
