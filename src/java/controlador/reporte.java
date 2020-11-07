@@ -128,9 +128,9 @@ public class reporte extends HttpServlet {
                 tabla.addCell(celda3);
                 tabla.addCell(celda4);
                 int posicion = 0;
-                int total_masculino = 0;
-                int total_femenino = 0;
-                int total_grupo  = 0;
+                double total_masculino = 0;
+                double total_femenino = 0;
+                double total_grupo  = 0;
                 
                 double porcen_masculino = 0.00;
                 double porcen_femenino = 0.00;
@@ -143,9 +143,9 @@ public class reporte extends HttpServlet {
                          total_grupo    = reporte.getCta_total();
                      }
                      else{
-                         porcen_masculino = (reporte.getCta_masculino().doubleValue()/total_grupo)*100;
-                         porcen_femenino  = (reporte.getCta_femenino().doubleValue()/total_grupo)*100;
-                         porcen_grupo     = (reporte.getCta_total().doubleValue()/total_grupo)*100;
+                         porcen_masculino = (reporte.getCta_masculino()/total_grupo)*100;
+                         porcen_femenino  = (reporte.getCta_femenino()/total_grupo)*100;
+                         porcen_grupo     = (reporte.getCta_total()/total_grupo)*100;
                          
                      tabla.addCell(reporte.getCodresultado());
                      tabla.addCell( String.format("%.2f", porcen_masculino) + " %");

@@ -40,7 +40,7 @@ public class ModelReporte {
                 "GROUP BY codvarfin,codresultado";      
                 */
                 
-                String sql = " SELECT codvarfin,codresultado escala,sum(Femenino) Femenino," + 
+                String sql = " SELECT rep.codvarfin,codresultado escala,var.tipovar,sum(Femenino) Femenino," + 
                         " SUM(masculino) Masculino,SUM(Femenino + Masculino) Total, " +
                         "       SUM(ORDEN) AS ORDEN " +
                         "FROM  ( " +
@@ -66,38 +66,51 @@ public class ModelReporte {
                         "	UNION ALL " +
                         "	SELECT rep.codvarfin,'MEDIA',AVG(media) AS Femenino,0 AS Masculino,1 AS ORDEN " +
                         "	FROM   tbreporte rep " +
-                        "	WHERE  sexo = 'Femenino' AND rep.codvarfin = 'RESILIENCIA' " +
+                        "	INNER  JOIN tbvarfinal var ON (rep.codvarfin = var.codvarfin) " +
+                        "	WHERE  sexo = 'Femenino' AND var.tipovar = 'MEDIA' " +
+                        "	GROUP BY rep.codvarfin " +
                         "   UNION ALL " +
                         "	SELECT rep.codvarfin,'MEDIA',0 AS Femenino,AVG(media)  AS Masculino,2 AS ORDEN " +
-                        "	FROM   tbreporte rep " +
-                        "	WHERE  sexo = 'Masculino' AND rep.codvarfin = 'RESILIENCIA' " +
+                        "	FROM   tbreporte rep "  + 
+                        "	INNER  JOIN tbvarfinal var ON (rep.codvarfin = var.codvarfin) " +
+                        "	WHERE  sexo = 'Masculino' AND var.tipovar = 'MEDIA' " +
+                        "	GROUP BY rep.codvarfin " +
                         "	UNION ALL " +
                         "	SELECT rep.codvarfin,'DESVIACION',AVG(desviacion) AS Femenino,0 AS Masculino,1 AS ORDEN " +
                         "	FROM   tbreporte rep " +
-                        "	WHERE  sexo = 'Femenino' AND rep.codvarfin = 'RESILIENCIA' " +
+                        "	INNER  JOIN tbvarfinal var ON (rep.codvarfin = var.codvarfin) " +
+                        "	WHERE  sexo = 'Femenino' AND var.tipovar = 'MEDIA' " +
+                        "	GROUP BY rep.codvarfin " +
                         "   UNION ALL " +
                         "	SELECT rep.codvarfin,'DESVIACION',0 AS Femenino,AVG(desviacion)  AS Masculino,2 AS ORDEN " +
                         "	FROM   tbreporte rep " +
-                        "	WHERE  sexo = 'Masculino' AND rep.codvarfin = 'RESILIENCIA' " +                                
-                        "  ) ABC " +
-                        " WHERE codvarfin = ? " +
-                        " GROUP BY codvarfin,codresultado " +
-                        "ORDER BY codvarfin,ORDEN,codresultado ";
-                
-                
-                
+                        "	INNER  JOIN tbvarfinal var ON (rep.codvarfin = var.codvarfin) " +
+                        "	WHERE  sexo = 'Masculino' AND var.tipovar = 'MEDIA' " +
+                        "	GROUP BY rep.codvarfin" +
+                        "  ) rep " +
+                        " INNER JOIN tbvarfinal var ON (rep.CodVarfin = var.codvarfin) " + 
+                        " WHERE rep.codvarfin = ? " +
+                        " GROUP BY rep.codvarfin,codresultado,var.tipovar " +
+                        "ORDER BY rep.codvarfin,ORDEN,codresultado ";
                 pstm = conn.prepareStatement(sql);
                 pstm.setString(1,codvarfin);            
                 resultado = pstm.executeQuery();
                 
                 while (resultado.next()){
+                    if(resultado.getString("escala").equalsIgnoreCase("OUT_RANGE"))
+                    {
+                        //
+                    }                        
+                    else{
                     reporte = new Reporte();
                     reporte.setCodvarfin(resultado.getString("codvarfin"));
                     reporte.setCodresultado(resultado.getString("escala"));
-                    reporte.setCta_masculino(resultado.getInt("Masculino"));
-                    reporte.setCta_femenino(resultado.getInt("Femenino"));
-                    reporte.setCta_total(resultado.getInt("Total"));
+                    reporte.setTipovar(resultado.getString("tipovar"));
+                    reporte.setCta_masculino(resultado.getDouble("Masculino"));
+                    reporte.setCta_femenino(resultado.getDouble("Femenino"));
+                    reporte.setCta_total(resultado.getDouble("Total"));
                     reportes.add(reporte);
+                            }
                 }                
                 conn.close();
             

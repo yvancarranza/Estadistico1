@@ -2,13 +2,14 @@ package entidad;
 public class Reporte {
     String codvarfin;
     String codresultado;
+    String tipovar;
     double  suma;
     double  media;
     double  desviacion;   
-    Integer cta_masculino;
-    Integer cta_femenino;
-    Integer cta_total;
-    
+    double cta_masculino;
+    double cta_femenino;
+    double cta_total;  
+
     public String getCodvarfin() {
         return codvarfin;
     }
@@ -23,6 +24,14 @@ public class Reporte {
 
     public void setCodresultado(String codresultado) {
         this.codresultado = codresultado;
+    }
+
+    public String getTipovar() {
+        return tipovar;
+    }
+
+    public void setTipovar(String tipovar) {
+        this.tipovar = tipovar;
     }
 
     public double getSuma() {
@@ -49,28 +58,28 @@ public class Reporte {
         this.desviacion = desviacion;
     }
 
-    public Integer getCta_masculino() {
+    public double getCta_masculino() {
         return cta_masculino;
     }
 
-    public void setCta_masculino(Integer cta_masculino) {
+    public void setCta_masculino(double cta_masculino) {
         this.cta_masculino = cta_masculino;
     }
 
-    public Integer getCta_femenino() {
+    public double getCta_femenino() {
         return cta_femenino;
     }
 
-    public void setCta_femenino(Integer cta_femenino) {
+    public void setCta_femenino(double cta_femenino) {
         this.cta_femenino = cta_femenino;
     }
 
-    public Integer getCta_total() {
+    public double getCta_total() {
         return cta_total;
     }
 
-    public void setCta_total(Integer cta_total) {
+    public void setCta_total(double cta_total) {
         this.cta_total = cta_total;
     }
-  
+    
 }

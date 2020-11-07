@@ -187,12 +187,13 @@ ALTER TABLE tbencuesta
 
 -- Tabla de Variables Finales
 CREATE TABLE tbvarfinal(
-	idregistro		int(11) NOT NULL,
+	idregistro	int(11) NOT NULL,
 	codvarfin	char(15) NOT NULL,
 	nomvarfin	Varchar(50) NOT NULL,
 	operacion   CHAR(15) NOT NULL,
 	origen      CHAR(15) NOT NULL,
-	duplicar    CHAR(2) NOT NULL
+	duplicar    CHAR(2) NOT NULL,
+	tipovar     char(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -203,15 +204,15 @@ ALTER TABLE tbvarfinal
   MODIFY idregistro int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 
-INSERT INTO tbvarfinal(codvarfin,nomvarfin,operacion,origen,duplicar) VALUES
-('ESTRES','Estrés','SUMA','BASE','SI'),
-('ANSIEDAD','Ansiedad','SUMA','BASE','SI'),
-('DEPRESION','Depresión','SUMA','BASE','SI'),
-('GPD','GDP Total','SUMA','BASE','SI'),
-('RIESGO_SUICIDA','Riesgo Suicida','SUMA','BASE','NO'),
-('TEPT','TEPT','SUMA','BASE','NO'),
-('RESILIENCIA','RESILIENCIA de Block','SUMA','BASE','NO'),
-('POBREZA','Nivel de Pobreza','SUMA','BASE','NO');
+INSERT INTO tbvarfinal(codvarfin,nomvarfin,operacion,origen,duplicar,tipovar) VALUES
+('ESTRES','Estrés','SUMA','BASE','SI','PORCENTUAL'),
+('ANSIEDAD','Ansiedad','SUMA','BASE','SI','PORCENTUAL'),
+('DEPRESION','Depresión','SUMA','BASE','SI','PORCENTUAL'),
+('GPD','GDP Total','SUMA','BASE','SI','PORCENTUAL'),
+('RIESGO_SUICIDA','Riesgo Suicida','SUMA','BASE','NO','PORCENTUAL'),
+('TEPT','TEPT','SUMA','BASE','NO','PORCENTUAL'),
+('RESILIENCIA','RESILIENCIA de Block','SUMA','BASE','NO','MEDIA'),
+('POBREZA','Nivel de Pobreza','SUMA','BASE','NO','PORCENTUAL');
 
 
 -- Tabla de Parametrizacion para Calculo
@@ -318,7 +319,7 @@ INSERT INTO tbparamcal(codvarfin,codvarori) VALUES
 
 -- Tabla de Rango de Variable Final
 CREATE TABLE tbrangovar(
-	idregistro		int(11) NOT NULL,
+	idregistro  int(11) NOT NULL,
 	codvarfin	char(15) NOT NULL,
 	rangoini	int(11) NOT NULL,
 	rangofin	int(11) NOT NULL,

@@ -83,19 +83,15 @@
                 <%
                     List<Variable> variables = mvariable.Listar();
                 %>
-
-               
                <br>
             
                  
             <form name ="reporte2" action = "reporte">
-                 <label> SINDROMES </label>
-                <br>
-                
-                <select name="Variable" id="Variable">
+                 <h4> SINDROMES </h4>
+                <select name="Variable" id="Variable" required>
                 <br>
                 <br>
-                <option>Seleccione Variable</option>
+                <option>Seleccione Sindrome</option>
                    <% for (Variable variable : variables) { %>
                    <option value="<%=variable.getCodvarfin() %>"><%=variable.getCodvarfin() %></option>
                    <% } %>
@@ -139,27 +135,27 @@
                             %>
                                 <tr>
                                     <td> TOTAL UNIDADES </td>
-                                    <td> <%= x.getCta_masculino() %> </td>
-                                    <td> <%= x.getCta_femenino() %> </td>
-                                    <td> <%= x.getCta_total() %> </td>
+                                    <td> <%= String.format("%.0f",x.getCta_masculino()) %> </td>
+                                    <td> <%= String.format("%.0f",x.getCta_femenino()) %> </td>
+                                    <td> <%= String.format("%.0f",x.getCta_total()) %> </td>
                                 </tr>        
                             <%
                            }
                            else
                            {
                                 
-                                porcen_masculino = (x.getCta_masculino().doubleValue()/total_grupo)*100;
-                                porcen_femenino  = (x.getCta_femenino().doubleValue()/total_grupo)*100;
-                                porcen_grupo     = (x.getCta_total().doubleValue()/total_grupo)*100;
+                                porcen_masculino = (x.getCta_masculino()/total_grupo)*100;
+                                porcen_femenino  = (x.getCta_femenino()/total_grupo)*100;
+                                porcen_grupo     = (x.getCta_total()/total_grupo)*100;
 
-                               if(x.getCodvarfin().equalsIgnoreCase("RESILIENCIA")) {
+                               if(x.getTipovar().equalsIgnoreCase("MEDIA") ) {
                 %>
                             
                     <tr>
                         <td> <%= x.getCodresultado() %> </td>
-                        <td> <%= String.format("%.2f", x.getCta_masculino().doubleValue()) %>  </td>
-                        <td> <%= String.format("%.2f",x.getCta_femenino().doubleValue()) %>  </td>
-                        <td> <%= String.format("%.2f",x.getCta_total().doubleValue()) %>  </td>
+                        <td> <%= String.format("%.2f", x.getCta_masculino()) %>  </td>
+                        <td> <%= String.format("%.2f",x.getCta_femenino()) %>  </td>
+                        <td> <%= String.format("%.2f",x.getCta_total()) %>  </td>
                     </tr>
                 <%    
                     }
