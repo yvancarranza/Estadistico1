@@ -4,6 +4,15 @@ package entidad;
 public class Variable {
     String codvarfin;
     String nomvarfin;
+    String codresultado;
+
+    public String getCodresultado() {
+        return codresultado;
+    }
+
+    public void setCodresultado(String codresultado) {
+        this.codresultado = codresultado;
+    }
 
     public String getCodvarfin() {
         return codvarfin;

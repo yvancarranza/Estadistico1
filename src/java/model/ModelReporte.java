@@ -14,7 +14,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ModelReporte {
-      
+     public boolean ProcesarEncuesta()
+     
+     {
+    boolean salida =false;
+    try
+        {
+            Connection conn;
+            PreparedStatement pstm;
+            conn =  (Connection) MySqlConexion.getConexion();
+            String sql = "CALL sp_generar_resultado()";
+            pstm = conn.prepareCall(sql);
+            salida = pstm.execute();
+            conn.close();
+        }
+        catch (SQLException ex)
+                {
+                    Logger.getLogger(ModelEncuesta.class.getName()).log(Level.SEVERE,null,ex);
+                }
+    return salida;
+  }
+     
     public List<Reporte> ListarReporte1(String codvarfin) {
         Connection conn;
         Reporte reporte;
@@ -120,5 +140,46 @@ public class ModelReporte {
         } 
     return reportes;
   }
+    
+   public List<Reporte> ListarReporte2(String codvarfin) {
+        Connection conn;
+        Reporte reporte;
+        PreparedStatement pstm;
+        ResultSet resultado=null;
+        List<Reporte> reportes = new ArrayList<Reporte>();
+        try {
+                conn =  (Connection) MySqlConexion.getConexion();                
+                String sql = "CALL sp_consultar_repregion()";
+                pstm = conn.prepareCall(sql);
+                resultado = pstm.executeQuery();
+                
+                while (resultado.next()){
+                    if(resultado.getString("codvarfin").equalsIgnoreCase(codvarfin))
+                    {
+                    reporte = new Reporte();
+                    reporte.setCodvarfin(resultado.getString("codvarfin"));
+                    reporte.setDepartamento(resultado.getString("departamento"));
+                    reporte.setTipovar(resultado.getString("tipovar"));
+                    reporte.setCta_ninguno(resultado.getDouble("Ninguno"));
+                    reporte.setCta_bajo(resultado.getDouble("Bajo"));
+                    reporte.setCta_normal(resultado.getDouble("Normal"));
+                    reporte.setCta_medio(resultado.getDouble("Medio"));
+                    reporte.setCta_moderado(resultado.getDouble("Moderado"));
+                    reporte.setCta_alta(resultado.getDouble("Alta"));
+                    reporte.setCta_severo(resultado.getDouble("Severo"));
+                    reporte.setCta_extremo(resultado.getDouble("Extremo"));
+                    reporte.setCta_total(resultado.getDouble("Total"));
+                    reportes.add(reporte);
+                            }
+                }                
+                conn.close();
+            
+        }
+        catch (SQLException ex) {
+                    Logger.getLogger(ModelEncuesta.class.getName()).log(Level.SEVERE,null,ex);
+        } 
+    return reportes;
+  } 
+    
 }
 

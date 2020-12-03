@@ -91,6 +91,9 @@ public class ModelPersonal {
             String sql = "update tbPersonal set nombres = ?,apellidos = ?,dni = ?," + 
                          "telefono = ?,direccion = ?,ubigeo = ?,genero = ?" + 
                          " where idpersonal = ?";
+                       
+            //String escapedSQL = StringEscapeUtils.es .escapeSql(sql);
+            
             pstm = conn.prepareStatement(sql);
             pstm.setString(1,obj.getNombres());
             pstm.setString(2,obj.getApellidos());

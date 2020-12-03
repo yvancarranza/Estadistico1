@@ -84,6 +84,15 @@
                         </span>
                     </a>
                 </li>
+                
+                <li>
+                    <a href="reporteporregion.jsp">
+                        <i class="fa fa-font fa-2x"></i>
+                        <span class="nav-text">
+                           Reporte x Region
+                        </span>
+                    </a>
+                </li>
                                         
           
             </ul>

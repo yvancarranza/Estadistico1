@@ -21,7 +21,8 @@ public class MySqlConexion {
             Logger.getLogger(MySqlConexion.class.getName()).log(Level.SEVERE, null, ex);
         }               
         Connection cnn;        
-        cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Sanamente","root", "");       
+        cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/estadistico","root", "");       
+        //cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Sanamente","root", "");       
         return cnn;
     }
 }

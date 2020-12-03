@@ -40,6 +40,9 @@ public class ModelUsuario {
         }
         catch (SQLException ex)
                 {
+                    if(ex.getSQLState().equalsIgnoreCase("23000"))
+                        System.out.println("USUARIO " + obj.getIdusuario() + " YA ESTA REGISTRADO EN BASE DE DATOS");
+                    else
                     Logger.getLogger(ModelUsuario.class.getName()).log(Level.SEVERE,null,ex);
                 }
     return salida;
@@ -88,6 +91,7 @@ public class ModelUsuario {
             ResultSet rs;
             
             conn = MySqlConexion.getConexion();
+            //String sql = "Select * from tbusuario ";
             String sql = "Select * from tbusuario where idusuario = ?";
             pstm =  conn.prepareStatement(sql);
             pstm.setString(1,idusuario);
@@ -108,6 +112,7 @@ public class ModelUsuario {
         }
        catch (SQLException ex)
        {
+           
            Logger.getLogger(ModelUsuario.class.getName()).log(Level.SEVERE, null, ex);
        }       
        return obj;

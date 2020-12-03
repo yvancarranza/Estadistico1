@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.ModelReporte;
+import org.owasp.esapi.ESAPI;
 
 @WebServlet(name = "reporte", urlPatterns = {"/reporte"})
 public class reporte extends HttpServlet {
@@ -34,12 +35,13 @@ public class reporte extends HttpServlet {
      response.setContentType("text/html;charset=UTF-8");
         
      String metodo = request.getParameter("metodo");
-     if(metodo.equals("lista1"))
+     //String metodo = ESAPI.encoder().encodeForHTML(request.getParameter("metodo"));
+     if(metodo.equals("sexo"))
         {
             listaporsexo(request,response);
-        }else if(metodo.equals("lista2"))
+        }else if(metodo.equals("region"))
         {
-            listaporsexo(request,response);
+            listaporregion(request,response);
         }
     }     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -77,6 +79,25 @@ public class reporte extends HttpServlet {
         }
      }
       
+       protected void listaporregion(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+         
+        String variable = request.getParameter("Variable");  
+        String bver = request.getParameter("btnver");  
+        String bpdf = request.getParameter("btnpdf");  
+        request.setAttribute("variable_analisis", "Variable Analizada: " + variable);
+        request.setAttribute("mvarfinal",variable);
+        if(bver != null) {
+            ModelReporte mreporte = new ModelReporte();
+            List<Reporte> reportes =  mreporte.ListarReporte2(variable);
+            request.setAttribute("data_reporte_region", reportes);         
+            request.getRequestDispatcher("/reporteporregion.jsp").forward(request, response);
+        }
+        else{
+             listaporsexopdf(request,response);
+        }
+     }
+      
      protected void listaporsexopdf(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          
@@ -94,8 +115,8 @@ public class reporte extends HttpServlet {
                 documento.open();
                 
                 Paragraph par1 = new Paragraph();
-                Font fonttitulo = new Font(Font.FontFamily.HELVETICA,16,Font.BOLD,BaseColor.BLUE);
-                par1.add(new Phrase("Reporte Estadístico sintomas",fonttitulo));
+                Font fonttitulo = new Font(Font.FontFamily.HELVETICA,16,Font.BOLD,BaseColor.BLACK);
+                par1.add(new Phrase("Reporte Estadístico - Síndromes",fonttitulo));
                 par1.setAlignment(Element.ALIGN_CENTER);
                 par1.add(new Phrase(Chunk.NEWLINE));
                 par1.add(new Phrase(Chunk.NEWLINE));
@@ -110,7 +131,7 @@ public class reporte extends HttpServlet {
                 documento.add(imagenes);
                 
                 Paragraph par2 = new Paragraph();
-                Font fontdescripcion = new Font(Font.FontFamily.TIMES_ROMAN,12,Font.NORMAL,BaseColor.BLACK);
+                Font fontdescripcion = new Font(Font.FontFamily.TIMES_ROMAN,14,Font.NORMAL,BaseColor.BLACK);
                 par2.add(new Phrase("Variables de Análisis : " + variable,fontdescripcion));
                 par2.setAlignment(Element.ALIGN_JUSTIFIED);
                 par2.add(new Phrase(Chunk.NEWLINE));
@@ -119,10 +140,24 @@ public class reporte extends HttpServlet {
             
                 
                 PdfPTable tabla = new PdfPTable(4);
-                PdfPCell  celda1 = new PdfPCell(new Paragraph("Escala",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.BLUE)));
-                PdfPCell  celda2 = new PdfPCell(new Paragraph("Masculino",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.BLUE)));
-                PdfPCell  celda3 = new PdfPCell(new Paragraph("Femenino",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.BLUE)));
-                PdfPCell  celda4 = new PdfPCell(new Paragraph("Total",FontFactory.getFont("Arial", 12,Font.BOLD,BaseColor.BLUE)));
+                tabla.setWidthPercentage(100);
+                tabla.setWidths(new float[] { 3, 1,1,1 });
+                
+                PdfPCell  celda1 = new PdfPCell(new Paragraph("            Escala / Sexo          ",FontFactory.getFont("garamond bold", 13,Font.BOLD,BaseColor.BLACK)));
+                PdfPCell  celda2 = new PdfPCell(new Paragraph("Masculino",FontFactory.getFont("Helvetica", 13,Font.BOLD,BaseColor.BLACK)));
+                PdfPCell  celda3 = new PdfPCell(new Paragraph("Femenino",FontFactory.getFont("Helvetica", 13,Font.BOLD,BaseColor.BLACK)));
+                PdfPCell  celda4 = new PdfPCell(new Paragraph("Total",FontFactory.getFont("Helvetica", 13,Font.BOLD,BaseColor.BLACK)));
+                celda1.setFixedHeight(30f);
+                celda1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                
+                celda1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                
                 tabla.addCell(celda1);
                 tabla.addCell(celda2);
                 tabla.addCell(celda3);
@@ -135,34 +170,113 @@ public class reporte extends HttpServlet {
                 double porcen_masculino = 0.00;
                 double porcen_femenino = 0.00;
                 double porcen_grupo = 0.00;
-                
+                String tipovar="";
                 for (Reporte reporte : reportes) {
                      if(reporte.getCodresultado().equalsIgnoreCase("TOTAL")) {
                          total_masculino = reporte.getCta_masculino();
                          total_femenino = reporte.getCta_femenino();
                          total_grupo    = reporte.getCta_total();
+                         tipovar = reporte.getTipovar();
                      }
                      else{
                          porcen_masculino = (reporte.getCta_masculino()/total_grupo)*100;
                          porcen_femenino  = (reporte.getCta_femenino()/total_grupo)*100;
                          porcen_grupo     = (reporte.getCta_total()/total_grupo)*100;
-                         
-                     tabla.addCell(reporte.getCodresultado());
-                     tabla.addCell( String.format("%.2f", porcen_masculino) + " %");
-                     tabla.addCell(String.format("%.2f", porcen_femenino) + " %");
-                     tabla.addCell(String.format("%.2f", porcen_grupo) + " %");
-                     }
+                    } 
+                    if(reporte.getTipovar().equalsIgnoreCase("MEDIA")){
+                        if(reporte.getCodresultado().equalsIgnoreCase("TOTAL")) {
+
+                             PdfPCell  celda11 = new PdfPCell(new Paragraph("TOTAL UNIDADES",FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda12 = new PdfPCell(new Paragraph(String.format("%.0f", reporte.getCta_masculino()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda13 = new PdfPCell(new Paragraph(String.format("%.0f", reporte.getCta_femenino()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda14 = new PdfPCell(new Paragraph(String.format("%.0f", reporte.getCta_total()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                            celda11.setHorizontalAlignment(Element.ALIGN_LEFT);
+                            celda12.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                            celda13.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                            celda14.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                             celda11.setFixedHeight(25f);                                   
+                            tabla.addCell(celda11);
+                            tabla.addCell(celda12 );
+                            tabla.addCell(celda13 );
+                            tabla.addCell(celda14 );                        }
+                        else {
+                            
+                             PdfPCell  celda11 = new PdfPCell(new Paragraph(reporte.getCodresultado(),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda12 = new PdfPCell(new Paragraph(String.format("%.2f", reporte.getCta_masculino()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda13 = new PdfPCell(new Paragraph(String.format("%.2f", reporte.getCta_femenino()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda14 = new PdfPCell(new Paragraph(String.format("%.2f", reporte.getCta_total()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                            celda11.setFixedHeight(25f);                                        
+                            celda11.setHorizontalAlignment(Element.ALIGN_LEFT);
+                            celda12.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                            celda13.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                            celda14.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                            tabla.addCell(celda11);
+                            tabla.addCell(celda12 );
+                            tabla.addCell(celda13 );
+                            tabla.addCell(celda14 );
+                        }
+                    }
+                    else{
+                        if(reporte.getCodresultado().equalsIgnoreCase("TOTAL")) {
+                             PdfPCell  celda11 = new PdfPCell(new Paragraph("TOTAL UNIDADES",FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda12 = new PdfPCell(new Paragraph(String.format("%.0f", reporte.getCta_masculino()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda13 = new PdfPCell(new Paragraph(String.format("%.0f", reporte.getCta_femenino()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda14 = new PdfPCell(new Paragraph(String.format("%.0f", reporte.getCta_total()),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             
+                            celda11.setFixedHeight(25f);                                   
+                            celda11.setHorizontalAlignment(Element.ALIGN_LEFT);
+                            celda12.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                            celda13.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                            celda14.setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+                            tabla.addCell(celda11);
+                            tabla.addCell(celda12 );
+                            tabla.addCell(celda13 );
+                            tabla.addCell(celda14 );                        
+                        }
+                        else {
+                             PdfPCell  celda11 = new PdfPCell(new Paragraph(reporte.getCodresultado(),FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda12 = new PdfPCell(new Paragraph(String.format("%.2f", porcen_masculino) + " %",FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda13 = new PdfPCell(new Paragraph(String.format("%.2f", porcen_femenino) + " %",FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             PdfPCell  celda14 = new PdfPCell(new Paragraph(String.format("%.2f", porcen_grupo) + " %",FontFactory.getFont("garamond bold", 11,Font.NORMAL,BaseColor.BLACK)));
+                             celda11.setFixedHeight(25f);                                   
+                             celda11.setHorizontalAlignment(Element.ALIGN_LEFT);
+                             celda12.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                             celda13.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                             celda14.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                
+                             tabla.addCell(celda11);
+                             tabla.addCell(celda12 );
+                             tabla.addCell(celda13 );
+                             tabla.addCell(celda14 );                                                    
+                        }
+                    }
                 } 
                 
                 porcen_masculino = (Double.valueOf(total_masculino)/total_grupo)*100;
                 porcen_femenino = (Double.valueOf(total_femenino)/total_grupo)*100;
                 porcen_grupo = 100.00;
                 
-                     tabla.addCell("TOTAL " );
-                     tabla.addCell( String.format("%.2f",porcen_masculino) + " %");
-                     tabla.addCell(String.format("%.2f",porcen_femenino) + " %");
-                     tabla.addCell(String.format("%.2f",porcen_grupo) + " %");
                 
+                PdfPCell  celda11 = new PdfPCell(new Paragraph("TOTAL PORCENTAJE ",FontFactory.getFont("garamond bold", 13,Font.BOLD,BaseColor.BLACK)));
+                PdfPCell  celda12 = new PdfPCell(new Paragraph(String.format("%.2f",porcen_masculino) + " %",FontFactory.getFont("garamond bold", 13,Font.BOLD,BaseColor.BLACK)));
+                PdfPCell  celda13 = new PdfPCell(new Paragraph(String.format("%.2f",porcen_femenino) + " %",FontFactory.getFont("garamond bold", 13,Font.BOLD,BaseColor.BLACK)));
+                PdfPCell  celda14 = new PdfPCell(new Paragraph(String.format("%.2f",porcen_grupo) + " %",FontFactory.getFont("garamond bold", 13,Font.BOLD,BaseColor.BLACK)));
+                
+                celda11.setFixedHeight(30f); 
+                celda11.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda12.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda13.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda14.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda11.setHorizontalAlignment(Element.ALIGN_LEFT);
+                celda12.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                celda13.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                celda14.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                
+                tabla.addCell(celda11);
+                tabla.addCell(celda12);
+                tabla.addCell(celda13);
+                tabla.addCell(celda14);
                 
                 documento.add(tabla);
                     documento.close();

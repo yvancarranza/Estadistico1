@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import model.ModelEncuesta;
 import model.ModelPregunta;
+import model.ModelReporte;
 import model.ModelRespuesta;
 
 /**
@@ -246,7 +247,7 @@ public class encuesta extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("/cargaExitosa.jsp");
 
         rd.forward(request, response);
-     }
+     } // Fin de Funcion para Importar Variables
     
     
     /*
@@ -312,6 +313,8 @@ public class encuesta extends HttpServlet {
             System.err.println(e.getMessage());      
             request.getRequestDispatcher("/cargaFallida.jsp").forward(request, response);     
         }
+        ModelReporte mreporte = new ModelReporte();
+        mreporte.ProcesarEncuesta();
         request.getRequestDispatcher("/cargaExitosa.jsp").forward(request, response);     
      }
     

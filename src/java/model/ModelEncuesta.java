@@ -23,7 +23,10 @@ public class ModelEncuesta {
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1,obj.getIdEncuesta());
             pstm.setString(2,obj.getCodPregunta());
-            pstm.setString(3, obj.getValRespuesta());
+            if(obj.getValRespuesta().length() > 49)
+                pstm.setString(3, obj.getValRespuesta().substring(0, 48));
+            else
+                pstm.setString(3, obj.getValRespuesta());
             salida = pstm.executeUpdate();
             conn.close();
         }
