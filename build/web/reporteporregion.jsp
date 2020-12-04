@@ -138,11 +138,23 @@
                         <th>Región/Escala</th> 
                          <%
                             String var_codvarfin = (String)request.getAttribute("mvarfinal");
+
+                            if(var_codvarfin == null)
+                            {
+                                var_codvarfin = "";
+                            }
                             List<Variable> indicadores = mvariable.ListarIndicador(var_codvarfin);
                          %>
                          <% for (Variable variable : indicadores) { %>
                         <th> <c:out value="<%= variable.getCodresultado()%>" > </c:out></th>
-                         <% } %>
+                        
+                            <% } 
+
+                            if(var_codvarfin.equalsIgnoreCase("RESILIENCIA")) { %>
+                              <th>Media</th> 
+                              <th>Desviación</th>                            
+                            <% } %>
+                            
                         <th>Total</th> 
                     </tr>
                 <%        
@@ -164,7 +176,8 @@
                     double porcen_alta = 0.00;
                     double porcen_severo = 0.00;
                     double porcen_extremo = 0.00;
-                    double porcen_grupo = 0.00;                    
+                    double porcen_grupo = 0.00;
+                    double total_general = 0.00;                    
 
                     List<Reporte> data = (List<Reporte>)request.getAttribute("data_reporte_region");
                     
@@ -261,6 +274,14 @@
                             <%}%>
 
                                 <% } %>
+                       <%
+                           if(x.getCodvarfin().equalsIgnoreCase("RESILIENCIA")) { %>
+                            <td> <%= String.format("%.2f",x.getMedia() ) %> </td>
+                            <td> <%= String.format("%.2f",x.getDesviacion() ) %> </td>
+                       <%
+                           total_general = total_general + x.getCta_total();
+                           }
+                       %>
                         <td> <%= String.format("%.2f",x.getCta_total()) %>  </td>
                     </tr>
                 <%    
@@ -320,7 +341,12 @@
 
                 %>
                     <tr>
-                        <th> TOTAL PORCENTAJE </th>
+                        <%
+                            if(var_codvarfin.equalsIgnoreCase("RESILIENCIA")) { %>
+                                <th> TOTALES </th>
+                            <%} else {%>
+                                 <th> TOTAL PORCENTAJE </th>
+                            <%} %>
                          <% for (Variable variable : indicadores) { %>
                             <% if(variable.getCodresultado().equalsIgnoreCase("Ninguno")) {%>
                                 <th> <%= String.format("%.2f",porcen_ninguno) %> % </th>
@@ -348,8 +374,13 @@
                               <%}%>
 
                                 <% } %>
-
-                        <th> 100 % </th>
+                          <% if(var_codvarfin.equalsIgnoreCase("RESILIENCIA")) { %>
+                                <th>  </th>
+                                <th>  </th>
+                                <th> <%= String.format("%.2f",total_general) %>  </th>
+                           <%} else {%>
+                                <th> 100 % </th>
+                           <%}%>
                     </tr>
                 <%
                     }

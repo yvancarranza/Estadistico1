@@ -5,11 +5,8 @@
         <group>
             <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/web/reporteporregion.jsp</file>
             <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/src/java/controlador/reporte.java</file>
-            <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/web/reporteporsexo.jsp</file>
-            <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/src/java/model/ModelPregunta.java</file>
-            <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/src/java/entidad/Encuesta.java</file>
+            <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/src/java/model/ModelVariable.java</file>
             <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/src/java/model/ModelReporte.java</file>
-            <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/web/registroUsuario.jsp</file>
             <file>file:/D:/UTP/CICLO%20VII%20-%20AGOSTO%202020/Integrador%202/GRUPO_01/Estadistico/src/java/entidad/Reporte.java</file>
         </group>
     </open-files>

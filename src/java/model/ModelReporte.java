@@ -168,6 +168,8 @@ public class ModelReporte {
                     reporte.setCta_alta(resultado.getDouble("Alta"));
                     reporte.setCta_severo(resultado.getDouble("Severo"));
                     reporte.setCta_extremo(resultado.getDouble("Extremo"));
+                    reporte.setMedia(resultado.getDouble("media"));
+                    reporte.setDesviacion(resultado.getDouble("Desviacion"));
                     reporte.setCta_total(resultado.getDouble("Total"));
                     reportes.add(reporte);
                             }
