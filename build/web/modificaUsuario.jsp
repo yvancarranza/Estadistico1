@@ -23,6 +23,13 @@
     </head>
     
     <body>
+          <% 
+                   String tipousuario;
+                   tipousuario = (String)session.getAttribute("tipousuario");
+                    if(tipousuario == null || tipousuario.isEmpty() ){
+                          response.sendRedirect("index.jsp");
+                   }
+       %>
          <header>
 		<div class="contenedor">
                     <div id="marca">

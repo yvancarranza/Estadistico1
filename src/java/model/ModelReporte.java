@@ -166,6 +166,7 @@ public class ModelReporte {
                     reporte.setCta_medio(resultado.getDouble("Medio"));
                     reporte.setCta_moderado(resultado.getDouble("Moderado"));
                     reporte.setCta_alta(resultado.getDouble("Alta"));
+                    reporte.setCta_muyalta(resultado.getDouble("MuyAlta"));
                     reporte.setCta_severo(resultado.getDouble("Severo"));
                     reporte.setCta_extremo(resultado.getDouble("Extremo"));
                     reporte.setMedia(resultado.getDouble("media"));

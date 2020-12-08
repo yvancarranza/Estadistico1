@@ -50,42 +50,53 @@
                         </span>
                     </a>    
                 </li>
-               
+               <% 
+                   String tipousuario;
+                   tipousuario = (String)session.getAttribute("tipousuario");
+                   if(tipousuario.equalsIgnoreCase("Admin")) {
+                %>
                 <li>
                     <a href="personal?metodo=lista">
-                        <i class="fa fa-font fa-2x"></i>
+                        <i class="fa fa-user fa-2x"></i>
                         <span class="nav-text">
                            Lista Usuarios
                         </span>
                     </a>
                 </li>
                 
-                  <li>
-                    <a href="#">
-                       <i class="fa fa-info fa-2x"></i>
-                        <span class="nav-text">
-                            Vacio
-                        </span>
-                    </a>
-                </li>
                 <li>
                     <a href="importarEncuesta.jsp">
-                        <i class="fa fa-font fa-2x"></i>
+                        <i class="fa fa-files-o fa-2x"></i>
                         <span class="nav-text">
                            Importar Encuesta
                         </span>
                     </a>
                 </li>
-          
+                <%
+                    }else{
+                       if(tipousuario == null || tipousuario.isEmpty() ){
+                          response.sendRedirect("index.jsp");
+                       }
+                   }
+                 %>
+                
                 <li>
                     <a href="reporteporsexo.jsp">
-                        <i class="fa fa-font fa-2x"></i>
+                        <i class="fa fa-bar-chart-o fa-2x"></i>
                         <span class="nav-text">
                            Reporte x Sexo
                         </span>
                     </a>
-                </li>          
-              
+                </li>
+                
+                <li>
+                    <a href="reporteporregion.jsp">
+                        <i class="fa fa-table fa-2x"></i>
+                        <span class="nav-text">
+                           Reporte x Region
+                        </span>
+                    </a>
+                </li>                                        
             </ul>
 
             <ul class="logout">

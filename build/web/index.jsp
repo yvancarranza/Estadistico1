@@ -62,6 +62,11 @@
                 <input type="submit" name="acceder" value="Ingresar"> 
 
     </form>
+    <%
+        session.setAttribute("usuario","");
+        session.setAttribute("tipousuario","");
+        session.setAttribute("nomusuario","");
+    %>
     <footer>
 	Derechos Reservados - <font face="Comic Sans MS"> Estadistico 1.0</font>, Copyright &copy;2020
 	<br>

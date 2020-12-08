@@ -130,16 +130,22 @@ public class usuario extends HttpServlet {
             //F = Profesional
             String url;
             url = "servicios.jsp";
+            String nombre = a.getNomusuario();
+            request.setAttribute("nomusuario", nombre);
+            session.setAttribute("tipousuario",tipodeusuario);
             if(tipodeusuario.equals("Admin"))
             {                
                 String hola = Integer.toString(idpersona);
+
                 session.setAttribute("idUsuario",hola );
+                session.setAttribute("nomusuario",nombre );
                 url = "servicios.jsp";
             }else if(tipodeusuario.equals("Personal"))
                 {
                     String hola = Integer.toString(idpersona);
+                    session.setAttribute("nomusuario",nombre );
                     session.setAttribute("idUsuario",hola);
-                    url = "menuUsuario.jsp";   
+                    url = "servicios.jsp";   
                 }
             else
             {

@@ -92,7 +92,7 @@ public class ModelUsuario {
             
             conn = MySqlConexion.getConexion();
             //String sql = "Select * from tbusuario ";
-            String sql = "Select * from tbusuario where idusuario = ?";
+            String sql = "Select us.*,per.nombres,per.apellidos from tbusuario us INNER JOIN tbpersonal per on (per.correo = us.idusuario) where us.idusuario = ?";
             pstm =  conn.prepareStatement(sql);
             pstm.setString(1,idusuario);
             rs = pstm.executeQuery();
@@ -107,6 +107,7 @@ public class ModelUsuario {
                 obj.setFechacaduca(rs.getString("fechacaduca"));
                 obj.setFecregistro(rs.getString("fecregistro"));
                 obj.setFecregistro(rs.getString("fecmodifica"));
+                obj.setNomusuario(rs.getString("nombres").trim() + " " + rs.getString("apellidos").trim());
                 obj.setIdpersona(rs.getInt("idpersona"));
             }
         }

@@ -21,8 +21,9 @@ public class ModelVariable {
         List<Variable> variables = new ArrayList<Variable>();
         try {
                 conn =  (Connection) MySqlConexion.getConexion();
-                String sql = " SELECT codvarfin,nomvarfin " +
-                        " FROM tbvarfinal ";
+                String sql = " SELECT DISTINCT var.codvarfin,var.nomvarfin " +
+                             " FROM tbvarfinal var " + 
+                             " INNER JOIN tbreporte rep ON (rep.codvarfin = var.codvarfin) ";
                         
                 pstm = conn.prepareStatement(sql);
                 resultado = pstm.executeQuery();                

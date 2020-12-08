@@ -50,7 +50,7 @@
         <div class="area"></div>
         <nav class="main-menu">
             <ul>
-                  <li>
+                 <li>
                     <a href="servicios.jsp">
                         <i class="fa fa-home fa-2x"></i>
                         <span class="nav-text">
@@ -58,15 +58,53 @@
                         </span>
                     </a>    
                 </li>
-               
+               <% 
+                   String tipousuario;
+                   tipousuario = (String)session.getAttribute("tipousuario");
+                   if(tipousuario.equalsIgnoreCase("Admin")) {
+                %>
                 <li>
-                    <a href="#">
-                       <i class="fa fa-info fa-2x"></i>
+                    <a href="personal?metodo=lista">
+                        <i class="fa fa-user fa-2x"></i>
                         <span class="nav-text">
-                            Vacio        
-               
-               
-    
+                           Lista Usuarios
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="importarEncuesta.jsp">
+                        <i class="fa fa-files-o fa-2x"></i>
+                        <span class="nav-text">
+                           Importar Encuesta
+                        </span>
+                    </a>
+                </li>
+                <%
+                    }else{
+                       if(tipousuario == null || tipousuario.isEmpty() ){
+                          response.sendRedirect("index.jsp");
+                       }
+                   }
+                 %>
+                
+                <li>
+                    <a href="reporteporsexo.jsp">
+                        <i class="fa fa-bar-chart-o fa-2x"></i>
+                        <span class="nav-text">
+                           Reporte x Sexo
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="reporteporregion.jsp">
+                        <i class="fa fa-table fa-2x"></i>
+                        <span class="nav-text">
+                           Reporte x Region
+                        </span>
+                    </a>
+                </li>                                        
             </ul>
 
             <ul class="logout">
@@ -143,6 +181,8 @@
                     double pie1data [];
                     String pie1label[];
                     
+                    double pie2data [];
+                    String pie2label[];
                     
                    
                     int contador = 0;
@@ -166,6 +206,10 @@
                     }
                     pie1label = new String[cuentaescala];
                     pie1data = new double[cuentaescala];
+                    
+                    pie2label = new String[cuentaescala];
+                    pie2data = new double[cuentaescala];
+                    
                     List<Reporte> data = (List<Reporte>)request.getAttribute("data_reporte_sexo");
                     if(data!=null){
                        for(Reporte x:data){
@@ -193,8 +237,12 @@
                                 
                                 //llenar el array
                                  
-                                pie1data[contador] = porcen_masculino;
+                                pie1data[contador] = x.getCta_masculino();
                                 pie1label[contador] = "'" + x.getCodresultado() + "'";
+
+                                pie2data[contador] = x.getCta_femenino();
+                                pie2label[contador] = "'" + x.getCodresultado() + "'";
+
                                 contador = contador + 1;
 
                                if(x.getTipovar().equalsIgnoreCase("MEDIA") ) {
@@ -245,13 +293,8 @@
                 
           <br><br> 
                    
-          
-          
-                <%
-                    //variable prueba, para llenar el script pero no me funca
-                    double[] guille = {total_masculino};
-                %>  
-                <%---Aquí agrego un aside en el mismo contenedor para graficar los pie---%> 
+                    
+         <%---Aquí agrego un aside en el mismo contenedor para graficar los pie---%> 
          <aside class="servicios">
                 <div class="row">
                     <div class="col-xs-10 col-md-6"><canvas id="myChart" width="100" height="100"></canvas></div>
@@ -272,25 +315,28 @@
     
     <script>
                
-    var  guille1=<%=(Arrays.toString(pie1data))%>;
-  
-        var guille2=[];
+    var vardata_pie1=<%=(Arrays.toString(pie1data))%>;
+    var varlabel_pie1=<%=(Arrays.toString(pie1label))%>;
+    
+    var vardata_pie2 =<%=(Arrays.toString(pie2data))%>;
+    var varlabel_pie2=<%=(Arrays.toString(pie2label))%>;
         
         var ctx= document.getElementById("myChart").getContext("2d");
         var myChart= new Chart(ctx,{
-            type:"pie",
+            type:"bar",
             data:{
-                labels: <%=(Arrays.toString(pie1label))%>,
+                labels: varlabel_pie1,
                 datasets:[{
-                        label:'Num datos',
-                        data: guille1,
-                        backgroundColor:[
-                            'rgb(66, 134, 244,0.5)',
-                            'rgb(74, 135, 72,0.5)',
+                        label:'Masculino',
+                        data: vardata_pie1,
+                        backgroundColor:[                            
+                            'rgb(0, 218, 236,0.5)',
+                            'rgb(0, 218, 0,0.5)',
                             'rgb(229, 176, 50,0.5)',
-                            'rgb(100, 145, 50,0.5)',
-                            'rgb(123, 89, 50,0.5)',
-                            'rgb(32, 154, 50,0.5)'
+                            'rgb(255, 255, 102,0.5)',
+                            'rgb(255, 153, 102,0.5)',
+                            'rgb(255, 0, 102,0.5)',
+                            'rgb(255, 0, 0,0.5)'                            
                         ]
                 }]
             },
@@ -307,16 +353,20 @@
         
         var ctx= document.getElementById("myChart2").getContext("2d");
         var myChart2= new Chart(ctx,{
-            type:"pie",
+            type:"bar",
             data:{
-                labels:['col1','col2','col3'],
+                labels:varlabel_pie2,
                 datasets:[{
-                        label:'Num datos',
-                        data:[12,38,2],
+                        label:'Femenino',
+                        data:vardata_pie2,
                         backgroundColor:[
-                            'rgb(66, 134, 244,0.5)',
-                            'rgb(74, 135, 72,0.5)',
-                            'rgb(229, 89, 50,0.5)'
+                            'rgb(0, 218, 236,0.5)',
+                            'rgb(0, 218, 0,0.5)',
+                            'rgb(229, 176, 50,0.5)',
+                            'rgb(255, 255, 102,0.5)',
+                            'rgb(255, 153, 102,0.5)',
+                            'rgb(255, 0, 102,0.5)',
+                            'rgb(255, 0, 0,0.5)'                            
                         ]
                 }]
             },

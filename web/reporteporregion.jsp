@@ -2,6 +2,7 @@
     Document   : listadoUsuarios
     Author     : Guillermo, Yvan
 --%>
+<%@page import="java.util.Arrays"%>
 <%@page import="org.owasp.esapi.ESAPI"%>
 <%@page import="entidad.Reporte"%>
 <%@page import="entidad.Variable"%>
@@ -22,7 +23,7 @@
         <link rel="stylesheet" type="text/css" href="estilos/css/estiloMenu.css">
         <link rel="stylesheet" type="text/css" href="estilos/css/estiloServicios.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>     
         
     </head>
    
@@ -51,7 +52,7 @@
         <div class="area"></div>
         <nav class="main-menu">
             <ul>
-                  <li>
+                 <li>
                     <a href="servicios.jsp">
                         <i class="fa fa-home fa-2x"></i>
                         <span class="nav-text">
@@ -59,15 +60,53 @@
                         </span>
                     </a>    
                 </li>
-               
+               <% 
+                   String tipousuario;
+                   tipousuario = (String)session.getAttribute("tipousuario");
+                   if(tipousuario.equalsIgnoreCase("Admin")) {
+                %>
                 <li>
-                    <a href="#">
-                       <i class="fa fa-info fa-2x"></i>
+                    <a href="personal?metodo=lista">
+                        <i class="fa fa-user fa-2x"></i>
                         <span class="nav-text">
-                            Vacio        
-               
-               
-    
+                           Lista Usuarios
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="importarEncuesta.jsp">
+                        <i class="fa fa-files-o fa-2x"></i>
+                        <span class="nav-text">
+                           Importar Encuesta
+                        </span>
+                    </a>
+                </li>
+                <%
+                    }else{
+                       if(tipousuario == null || tipousuario.isEmpty() ){
+                          response.sendRedirect("index.jsp");
+                       }
+                   }
+                 %>
+                
+                <li>
+                    <a href="reporteporsexo.jsp">
+                        <i class="fa fa-bar-chart-o fa-2x"></i>
+                        <span class="nav-text">
+                           Reporte x Sexo
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="reporteporregion.jsp">
+                        <i class="fa fa-table fa-2x"></i>
+                        <span class="nav-text">
+                           Reporte x Region
+                        </span>
+                    </a>
+                </li>                                        
             </ul>
 
             <ul class="logout">
@@ -164,6 +203,7 @@
                     double total_medio = 0.00;
                     double total_moderado = 0.00;
                     double total_alta = 0.00;
+                    double total_muyalta = 0.00;
                     double total_severo = 0.00;
                     double total_extremo = 0.00;
                     double total_grupo    = 0.00;
@@ -174,12 +214,42 @@
                     double porcen_medio = 0.00;
                     double porcen_moderado = 0.00;
                     double porcen_alta = 0.00;
+                    double porcen_muyalta = 0.00;
                     double porcen_severo = 0.00;
                     double porcen_extremo = 0.00;
                     double porcen_grupo = 0.00;
-                    double total_general = 0.00;                    
-
+                    double total_general = 0.00;                                        
+                    String Matrizlabel[];
+                    double mdataNinguno [];
+                    double mdataBajo [];
+                    double mdataNormal [];
+                    double mdataMedio [];
+                    double mdataModerado [];
+                    double mdataAlta [];
+                    double mdataMuyAlta [];
+                    double mdataSevero [];
+                    double mdataExtremo [];
+                    
+                    int cuentaescala;                    
+                    int contador = 0;
                     List<Reporte> data = (List<Reporte>)request.getAttribute("data_reporte_region");
+                    if(data!=null){
+                      cuentaescala = data.size()-1;
+                        
+                    }else{
+                      cuentaescala = 0;
+                    }
+                    
+                    Matrizlabel = new String[cuentaescala];
+                    mdataNinguno = new double[cuentaescala];
+                    mdataBajo = new double[cuentaescala];
+                    mdataNormal = new double[cuentaescala];
+                    mdataMedio = new double[cuentaescala];
+                    mdataModerado = new double[cuentaescala];
+                    mdataAlta = new double[cuentaescala];
+                    mdataMuyAlta = new double[cuentaescala];
+                    mdataSevero = new double[cuentaescala];
+                    mdataExtremo = new double[cuentaescala];
                     
                     if(data!=null){
                        for(Reporte x:data){
@@ -190,6 +260,7 @@
                                total_medio = x.getCta_medio();
                                total_moderado = x.getCta_moderado();
                                total_alta = x.getCta_alta();
+                               total_muyalta = x.getCta_muyalta();
                                total_severo = x.getCta_severo();
                                total_extremo =  x.getCta_extremo();
                                
@@ -223,7 +294,7 @@
                                    <% if(variable.getCodresultado().equalsIgnoreCase("Extremadamente")) {%>
                                         <td> <%= String.format("%.0f",x.getCta_extremo()) %> </td>
                                    <%}%>
-                                  v<% } %>                                    
+                                  <% } %>                                    
                                     <td> <%= String.format("%.0f",x.getCta_total()) %> </td>
                                 </tr>        
                             <%
@@ -237,6 +308,7 @@
                                 porcen_medio  = (x.getCta_medio()/total_grupo)*100;
                                 porcen_moderado = (x.getCta_moderado()/total_grupo)*100;
                                 porcen_alta = (x.getCta_alta()/total_grupo)*100;
+                                porcen_muyalta = (x.getCta_muyalta()/total_grupo)*100;
                                 porcen_severo  = (x.getCta_severo()/total_grupo)*100;
                                 porcen_extremo  = (x.getCta_extremo()/total_grupo)*100;
 
@@ -266,6 +338,9 @@
                            <% if(variable.getCodresultado().equalsIgnoreCase("Alta")) {%>
                                 <td> <%= String.format("%.2f",x.getCta_alta()) %> </td>
                             <%}%>
+                            <% if(variable.getCodresultado().equalsIgnoreCase("Muy Alta")) {%>
+                                <td> <%= String.format("%.2f",x.getCta_muyalta()) %> </td>
+                            <%}%>                            
                            <% if(variable.getCodresultado().equalsIgnoreCase("Severo")) {%>
                                 <td> <%= String.format("%.2f",x.getCta_severo()) %> </td>
                             <%}%>
@@ -291,30 +366,70 @@
                  %>
                   <tr>
                         <td> <%= x.getDepartamento() %> </td>
+                        <% 
+                            Matrizlabel[contador] = "'" + x.getDepartamento() + "'";
+                            
+                        %>
                             <% for (Variable variable : indicadores) { %>
                             <% if(variable.getCodresultado().equalsIgnoreCase("Ninguno")) {%>
                                 <td> <%= String.format("%.2f",porcen_ninguno) %> % </td>
+                                <%
+                                    mdataNinguno[contador] = x.getCta_ninguno();
+                                %>
                               <%}%>
                            <% if(variable.getCodresultado().equalsIgnoreCase("Bajo")) {%>
                                 <td> <%= String.format("%.2f",porcen_bajo) %> % </td>
+                                <%
+                                    mdataBajo[contador] = x.getCta_bajo();
+                                %>                                
                               <%}%>
                            <% if(variable.getCodresultado().equalsIgnoreCase("Normal")) {%>
                                 <td> <%= String.format("%.2f",porcen_normal) %> % </td>
+                                <%
+                                    mdataNormal[contador] = x.getCta_normal();
+                                %>                                                                
                               <%}%>
+                              
                            <% if(variable.getCodresultado().equalsIgnoreCase("Medio")) {%>
                                 <td> <%= String.format("%.2f",porcen_medio) %> % </td>  
+                                <%
+                                    mdataMedio[contador] = x.getCta_medio();
+                                %>                                                                                                
                               <%}%>
+                              
                            <% if(variable.getCodresultado().equalsIgnoreCase("Moderado")) {%>
                                 <td> <%= String.format("%.2f",porcen_moderado) %> % </td>
+                                <%
+                                    mdataModerado[contador] = x.getCta_moderado();
+                                %>                                                                                                                                
                               <%}%>
+                              
                            <% if(variable.getCodresultado().equalsIgnoreCase("Alta")) {%>
                                 <td> <%= String.format("%.2f",porcen_alta) %> % </td>  
+                                <%
+                                    mdataAlta[contador] = x.getCta_alta();
+                                %>                                                                                                                                                                
                               <%}%>
+
+                           <% if(variable.getCodresultado().equalsIgnoreCase("Muy Alta")) {%>
+                                <td> <%= String.format("%.2f",porcen_muyalta) %> % </td>  
+                                <%
+                                    mdataMuyAlta[contador] = x.getCta_muyalta();
+                                %>                                                                                                                                                                
+                              <%}%>
+                              
                            <% if(variable.getCodresultado().equalsIgnoreCase("Severo")) {%>
                                 <td> <%= String.format("%.2f",porcen_severo) %> % </td>
+                                <%
+                                    mdataSevero[contador] = x.getCta_severo();
+                                %>                                                                                                                                                                
+                                
                               <%}%>
                            <% if(variable.getCodresultado().equalsIgnoreCase("Extremadamente")) {%>
                                 <td> <%= String.format("%.2f",porcen_extremo) %> % </td>
+                                <%
+                                    mdataExtremo[contador] = x.getCta_extremo();
+                                %>                                                                                                                                                                                                
                               <%}%>
 
                                 <% } %>
@@ -323,7 +438,7 @@
                     </tr>
                  
                  <%
-                            
+                            contador = contador + 1; 
                             }
                             }
       
@@ -388,6 +503,16 @@
                 </table>
            </div>
          </aside>           
+          <br><br> 
+                   
+                    
+         <%---Aquí agrego un aside en el mismo contenedor para graficar los pie---%> 
+         <aside class="servicios">
+                <div class="row">
+                    <div class="col-xs-5 col-md-8"><canvas id="myChart" width="100" height="50"></canvas></div>
+                </div>      
+          </aside>     
+                
         </div>          
    
                 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -396,4 +521,69 @@
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     
     </body>
+
+  <script>
+               
+    var vardata_ninguno=<%=(Arrays.toString(mdataNinguno))%>;
+    var vardata_bajo=<%=(Arrays.toString(mdataBajo))%>;
+    var vardata_normal=<%=(Arrays.toString(mdataNormal))%>;
+    var vardata_medio=<%=(Arrays.toString(mdataMedio))%>;
+    var vardata_moderado=<%=(Arrays.toString(mdataModerado))%>;
+    var vardata_alta=<%=(Arrays.toString(mdataAlta))%>;
+    var vardata_muyalta=<%=(Arrays.toString(mdataMuyAlta))%>;
+    var vardata_severo=<%=(Arrays.toString(mdataSevero))%>;
+    var vardata_extremo=<%=(Arrays.toString(mdataExtremo))%>;
+    var varlabel_matriz=<%=(Arrays.toString(Matrizlabel))%>;    
+    var ctx= document.getElementById("myChart").getContext("2d");
+
+    //if(variable_analisis === 'RESILIENCIA')   {
+    
+        var myChart= new Chart(ctx,{
+        type:"bar",
+        data:{
+              labels: varlabel_matriz,
+              datasets:[{
+                label:'Bajo',
+                data: vardata_bajo,
+                backgroundColor:'rgb(0, 218, 236,0.5)'      
+                },{
+                label:'Normal',
+                data: vardata_normal,
+                backgroundColor:'rgb(0, 218, 0,0.5)'  
+                },{
+                label:'Medio',
+                data: vardata_medio,
+                backgroundColor:'rgb(229, 176, 50,0.5)'
+                },{
+                label:'Moderado',
+                data: vardata_moderado,
+                backgroundColor:'rgb(255, 255, 102,0.5)'
+                },{
+                label:'Alta',
+                data: vardata_alta,
+                backgroundColor:'rgb(255, 153, 102,0.5)'
+                },{
+                label:'Severo',
+                data: vardata_severo,
+                backgroundColor:'rgb(255, 0, 102,0.5)'
+                },{
+                label:'Extremo',
+                data: vardata_extremo,
+                backgroundColor:'rgb(255, 0, 0,0.5)'  
+                }
+            
+            ]
+            },
+            options:{
+                scales:{
+                    yAxes:[{
+                            ticks:{
+                                beginAtZero:true
+                            }
+                    }]
+                }
+            }
+        });
+    //};
+    </script>
 </html>

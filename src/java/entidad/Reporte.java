@@ -26,6 +26,15 @@ public class Reporte {
     double cta_alta;
     double cta_severo;
     double cta_extremo;
+    double cta_muyalta;
+
+    public double getCta_muyalta() {
+        return cta_muyalta;
+    }
+
+    public void setCta_muyalta(double cta_muyalta) {
+        this.cta_muyalta = cta_muyalta;
+    }
 
     public double getCta_ninguno() {
         return cta_ninguno;
