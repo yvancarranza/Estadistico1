@@ -55,7 +55,7 @@ public class ModelPersonal {
             PreparedStatement pstm;
             ResultSet rs;
             conn = MySqlConexion.getConexion();
-            String sql = "select * from tbPersonal";
+            String sql = "select * from tbpersonal";
             pstm = conn.prepareStatement(sql);
             rs = pstm.executeQuery();
             Personal obj;
@@ -88,7 +88,7 @@ public class ModelPersonal {
             Connection conn;
             PreparedStatement pstm;
             conn = MySqlConexion.getConexion();
-            String sql = "update tbPersonal set nombres = ?,apellidos = ?,dni = ?," + 
+            String sql = "update tbpersonal set nombres = ?,apellidos = ?,dni = ?," + 
                          "telefono = ?,direccion = ?,ubigeo = ?,genero = ?" + 
                          " where idpersonal = ?";
                        
@@ -122,7 +122,7 @@ public class ModelPersonal {
             Connection conn;
             PreparedStatement pstm;
             conn = MySqlConexion.getConexion();
-             String sql = "delete from tbPersonal where idpersonal=?";
+             String sql = "delete from tbpersonal where idpersonal=?";
             pstm = conn.prepareStatement(sql);
              pstm.setInt(1, idPersonal);
             salida = pstm.executeUpdate();

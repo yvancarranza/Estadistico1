@@ -27,7 +27,7 @@ public class ModelUsuario {
             Connection conn;
             PreparedStatement pstm;
             conn =  (Connection) MySqlConexion.getConexion();
-            String sql = "insert into tbUsuario(idusuario,password,tipodeusuario,estado,tienecaducidad,idpersona)" + 
+            String sql = "insert into tbusuario(idusuario,password,tipodeusuario,estado,tienecaducidad,idpersona)" + 
                          "values(?,?,?,?,?,?)";            
             pstm = conn.prepareStatement(sql);
             pstm.setString(1,obj.getIdusuario());
@@ -58,7 +58,7 @@ public class ModelUsuario {
             PreparedStatement pstm;
             ResultSet rs;
             conn = MySqlConexion.getConexion();
-            String sql = "select * from tbusuario";
+            String sql = "Select us.*,per.nombres,per.apellidos from tbusuario us INNER JOIN tbpersonal per on (per.correo = us.idusuario) ";
             pstm = conn.prepareStatement(sql);
             rs = pstm.executeQuery();
             Usuario obj;

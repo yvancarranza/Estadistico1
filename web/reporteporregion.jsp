@@ -3,13 +3,11 @@
     Author     : Guillermo, Yvan
 --%>
 <%@page import="java.util.Arrays"%>
-<%@page import="org.owasp.esapi.ESAPI"%>
 <%@page import="entidad.Reporte"%>
 <%@page import="entidad.Variable"%>
 <%@page import="model.ModelVariable"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
      <head>      
@@ -63,6 +61,9 @@
                <% 
                    String tipousuario;
                    tipousuario = (String)session.getAttribute("tipousuario");
+                   if(tipousuario == null){
+                       tipousuario = "";
+                   }                   
                    if(tipousuario.equalsIgnoreCase("Admin")) {
                 %>
                 <li>
@@ -142,7 +143,7 @@
                           <%-- agregue valor "" primera option/js ggl--%>
                           <option value="">Seleccione Sindrome</option>
                          <% for (Variable variable : variables) { %>
-                         <option c:out value="<%= variable.getCodvarfin() %>"><%=variable.getCodvarfin() %></option>
+                         <option value="<%=variable.getCodvarfin() %>"><%=variable.getCodvarfin() %></option>
                          <% } %>
                       </select>
                     </div>
@@ -171,7 +172,7 @@
             <div>
                 <h4> <center>RESULTADO</center> </h4>
                 
-                <h4 > <c:out value="${variable_analisis}"></c:out></h4>
+                <h4 > ${variable_analisis}</h4>
                 <table class="table">
                     <tr>
                         <th>Región/Escala</th> 
@@ -184,8 +185,9 @@
                             }
                             List<Variable> indicadores = mvariable.ListarIndicador(var_codvarfin);
                          %>
+
                          <% for (Variable variable : indicadores) { %>
-                        <th> <c:out value="<%= variable.getCodresultado()%>" > </c:out></th>
+                        <th> <%= variable.getCodresultado()%> </th>
                         
                             <% } 
 

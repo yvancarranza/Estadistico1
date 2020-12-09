@@ -21,8 +21,10 @@ public class MySqlConexion {
             Logger.getLogger(MySqlConexion.class.getName()).log(Level.SEVERE, null, ex);
         }               
         Connection cnn;        
-        cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/estadistico","root", "");       
+        //cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/estadistico","root", "");       
         //cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Sanamente","root", "");       
+       cnn = DriverManager.getConnection("jdbc:mysql://node59701-env-tomcat.jelastic.saveincloud.net:3306/estadistico","root", "PQGhbm23227");       
+        //node59677-env-1093214.jelastic.saveincloud.net
         return cnn;
     }
 }

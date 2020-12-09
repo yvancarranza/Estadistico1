@@ -61,6 +61,9 @@
                <% 
                    String tipousuario;
                    tipousuario = (String)session.getAttribute("tipousuario");
+                   if(tipousuario == null){
+                       tipousuario = "";
+                   }
                    if(tipousuario.equalsIgnoreCase("Admin")) {
                 %>
                 <li>

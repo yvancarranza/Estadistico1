@@ -49,10 +49,10 @@ public class ModelVariable {
         List<Variable> variables = new ArrayList<Variable>();
         try {
                 conn =  (Connection) MySqlConexion.getConexion();
-                String sql = " SELECT DISTINCT codresultado " +
+                String sql = " SELECT DISTINCT codresultado,orden " +
                         " FROM tbreporte " + 
-                        " WHERE CODRESULTADO <> 'OUT_RANGE' and codvarfin = ?" + 
-                        " ORDER BY ORDEN ";
+                        " WHERE codresultado <> 'OUT_RANGE' and codvarfin = ? " + 
+                        " ORDER BY orden ";
 
                 pstm = conn.prepareStatement(sql);
                 pstm.setString(1,codvarfin);
@@ -65,6 +65,7 @@ public class ModelVariable {
                 conn.close();            
         }
         catch (SQLException ex) {
+                    System.out.print(ex.getErrorCode());
                     Logger.getLogger(ModelEncuesta.class.getName()).log(Level.SEVERE,null,ex);
         } 
     return variables;

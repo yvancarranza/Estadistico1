@@ -159,8 +159,8 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_generar_resultado` ()  BEGIN
 
   DECLARE var_idencuesta INT;
-  DECLARE finished INTEGER DEFAULT 0;
-  DECLARE finished2 INTEGER DEFAULT 0;
+  DECLARE finished INT DEFAULT 0;
+  DECLARE finished2 INT DEFAULT 0;
   DECLARE var_suma INT DEFAULT 0;
   DECLARE var_CodVariable CHAR(15);
   DECLARE var_operacion CHAR(15);
@@ -240,7 +240,7 @@ DELETE FROM tbreporte;
 						 SET var_media := var_suma/14;
 					 
 						 
-						 SET var_desviacion := (SELECT STD(CONVERT(valrespuesta,INTEGER))
+						 SET var_desviacion := (SELECT STD(CONVERT(valrespuesta,SIGNED))
 						                        FROM   tbencuesta
 														WHERE  idencuesta = var_idencuesta and CodPregunta IN (
 														       SELECT CodvarOri
