@@ -18,7 +18,7 @@ public class ModelEncuesta {
             Connection conn;
             PreparedStatement pstm;
             conn =  (Connection) MySqlConexion.getConexion();
-            String sql = "insert into tbEncuesta(idregistro,idencuesta,codpregunta,valrespuesta)" + 
+            String sql = "insert into tbencuesta(idregistro,idencuesta,codpregunta,valrespuesta)" + 
                          " values(null,?,?,?)";            
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1,obj.getIdEncuesta());
@@ -44,7 +44,7 @@ public class ModelEncuesta {
             Connection conn;
             PreparedStatement pstm;
             conn = MySqlConexion.getConexion();
-             String sql = "delete from tbEncuesta ";
+             String sql = "delete from tbencuesta ";
             pstm = conn.prepareStatement(sql);
             salida = pstm.executeUpdate();
             conn.close();

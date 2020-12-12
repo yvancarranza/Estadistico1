@@ -58,6 +58,15 @@
                         </span>
                     </a>    
                 </li>
+                <li>
+                    <a href="personal?metodo=busca">
+                        <i class="fa fa-archive fa-2x"></i>
+                        <span class="nav-text">
+                           Modificar Perfil
+                        </span>
+                    </a>
+                </li>
+                
                <% 
                    String tipousuario;
                    tipousuario = (String)session.getAttribute("tipousuario");
@@ -169,7 +178,7 @@
         </aside>
                
         <aside class="servicios">
-            <div>
+             <div class="table-responsive">
                 <h4> <center>RESULTADO</center> </h4>
                 
                 <h4 > ${variable_analisis}</h4>

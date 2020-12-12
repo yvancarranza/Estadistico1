@@ -152,8 +152,12 @@ public class personal extends HttpServlet {
       protected void elimina(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
            String id = request.getParameter("id");           
-           ModelPersonal model = new ModelPersonal();
+          ModelPersonal model = new ModelPersonal();
+           Personal p = model.buscaPersonal(Integer.parseInt(id));           
            model.eliminaPersonal(Integer.parseInt(id));           
+           
+           ModelUsuario mus = new ModelUsuario();
+           mus.eliminaUsuario(p.getCorreo());
            lista(request, response);          
        }
 
@@ -209,6 +213,18 @@ public class personal extends HttpServlet {
          
         ModelPersonal model = new ModelPersonal();         
         model.actualizaPersonal(objp);
+        
+        if(!password.isEmpty())
+        {
+            // Solo si se ha cambiado la contraseña, se procede a actualizar la credencial del usuario
+            Usuario u = new Usuario();
+            u.setIdusuario(objp.getCorreo());
+            u.setPassword(password);
+            
+            ModelUsuario mus = new ModelUsuario();
+            mus.actualizaUsuario(u);
+        }
+        
         //RequestDispatcher dispatcher = request.getRequestDispatcher("personal?metodo=lista");
          request.getRequestDispatcher("personal?metodo=lista").forward(request, response);
                 

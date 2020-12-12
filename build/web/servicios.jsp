@@ -50,6 +50,15 @@
                         </span>
                     </a>    
                 </li>
+                <li>
+                    <a href="personal?metodo=busca">
+                        <i class="fa fa-archive fa-2x"></i>
+                        <span class="nav-text">
+                           Modificar Perfil
+                        </span>
+                    </a>
+                </li>
+
                <% 
                    String tipousuario;
                    tipousuario = (String)session.getAttribute("tipousuario");
@@ -82,7 +91,8 @@
                        }
                    }
                  %>
-                
+
+
                 <li>
                     <a href="reporteporsexo.jsp">
                         <i class="fa fa-bar-chart-o fa-2x"></i>
@@ -116,6 +126,8 @@
        
          <aside class="servicios">
 			<div>
+                             
+                             
                             <%
                                String varnombre = (String)request.getAttribute("nomusuario");
                             %>
@@ -124,6 +136,7 @@
                                     </p>
                                 <p>También podrás editar tu perfil.</p>
                                 
+                                <img src="estilos/imagenes/indeximg.jpeg" width="" height="" > 
 			</div>
 	</aside>
         

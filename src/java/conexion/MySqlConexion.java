@@ -14,16 +14,36 @@ import java.util.logging.Logger;
  */
 public class MySqlConexion {
     //Creo una clase estatica
+    public static String mensajeconexion = "";
+
+    public String getMensajeconexion() {
+        return mensajeconexion;
+    }
+
+    public void setMensajeconexion(String mensajeconexion) {
+        this.mensajeconexion = mensajeconexion;
+    }
     public static Connection getConexion() throws SQLException{
         try{
             Class.forName("com.mysql.jdbc.Driver");
         }catch (ClassNotFoundException ex){
             Logger.getLogger(MySqlConexion.class.getName()).log(Level.SEVERE, null, ex);
+            mensajeconexion = "Driver : " + ex.getMessage();            
         }               
-        Connection cnn;        
-        //cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/estadistico","root", "");       
+        Connection cnn = null;        
+          
+       try {
+       // cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/estadistico","root", "Ymlal6dlm!");              
+        //cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/estadistico?user=root&password=Ymlal6dlm!");
+        //cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/estadistico","root", "");    
+        cnn = DriverManager.getConnection("jdbc:mysql://node59770-estadistico.jelastic.saveincloud.net:3306/estadistico","root", "EDAobq53231");       
+       }
+       catch (SQLException ex){
+            Logger.getLogger(MySqlConexion.class.getName()).log(Level.SEVERE, null, ex);
+            mensajeconexion = "Conectando: " + ex.getMessage();       
+        }
         //cnn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Sanamente","root", "");       
-       cnn = DriverManager.getConnection("jdbc:mysql://node59701-env-tomcat.jelastic.saveincloud.net:3306/estadistico","root", "PQGhbm23227");       
+       //cnn = DriverManager.getConnection("jdbc:mysql://node59770-estadistico.jelastic.saveincloud.net:3306/estadistico","root", "EDAobq53231");       
         //node59677-env-1093214.jelastic.saveincloud.net
         return cnn;
     }

@@ -116,6 +116,12 @@ public class usuario extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
             dispatcher.forward(request, response);            
          }
+         else{
+              if(a.getIdusuario().equalsIgnoreCase("ERROR")){
+                  request.setAttribute("alertMsg", a.getNomusuario());
+                  RequestDispatcher dispatcher = request.getRequestDispatcher("mensajeDB.jsp");                  
+                  dispatcher.forward(request, response);            
+              }             
          else if (a.getPassword().equalsIgnoreCase(password))
          {      
              tipodeusuario = a.getTipodeusuario();
@@ -124,6 +130,7 @@ public class usuario extends HttpServlet {
             session.setAttribute("usuario", idusuario);
             session.setAttribute("tipodeusuario", tipodeusuario);
             session.setAttribute("idpaciente",0);
+            session.setAttribute("idpersonal",0);
             // Obtener el ID del Paciente
             //P = Paciente
             //A = Administrador
@@ -133,12 +140,15 @@ public class usuario extends HttpServlet {
             String nombre = a.getNomusuario();
             request.setAttribute("nomusuario", nombre);
             session.setAttribute("tipousuario",tipodeusuario);
+            String idpersonal = Integer.toString(idpersona);
+            session.setAttribute("idpersonal",idpersonal);
             if(tipodeusuario.equals("Admin"))
             {                
+                
                 String hola = Integer.toString(idpersona);
-
                 session.setAttribute("idUsuario",hola );
                 session.setAttribute("nomusuario",nombre );
+                
                 url = "servicios.jsp";
             }else if(tipodeusuario.equals("Personal"))
                 {
@@ -154,8 +164,7 @@ public class usuario extends HttpServlet {
                url = "index.jsp";                    
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-            dispatcher.forward(request, response); 
-            
+            dispatcher.forward(request, response);             
          }
          else
          {
@@ -163,6 +172,7 @@ public class usuario extends HttpServlet {
             request.setAttribute("message", message);
             RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
             dispatcher.forward(request, response);            
+         }
          }
      }
 

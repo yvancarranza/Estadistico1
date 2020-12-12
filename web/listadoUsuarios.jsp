@@ -18,6 +18,7 @@
 	<link rel="stylesheet" type="text/css" href="estilos/css/estilos.css">
         <link rel="stylesheet" type="text/css" href="estilos/css/estiloMenu.css">
         <link rel="stylesheet" type="text/css" href="estilos/css/estiloServicios.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     </head>
    
     <body>
@@ -53,6 +54,15 @@
                         </span>
                     </a>    
                 </li>
+                <li>
+                    <a href="personal?metodo=busca">
+                        <i class="fa fa-archive fa-2x"></i>
+                        <span class="nav-text">
+                           Modificar Perfil
+                        </span>
+                    </a>
+                </li>
+                
                <% 
                    String tipousuario;
                    tipousuario = (String)session.getAttribute("tipousuario");
@@ -119,7 +129,7 @@
         </nav>
        
          <aside class="servicios">
-			<div>
+			  <div class="table-responsive">
 				<h3>Listado de Usuarios...</h3>
 				<p style="text-align: justify;">Aquí podras gestionar los usuarios registrados.</p>
                                 
@@ -148,10 +158,10 @@
                                 <td> <%= x.getGenero() %> </td>
                                 
                                 <td>
-                                    <a href="personal?metodo=busca&id=<%= x.getIdpersonal() %>">EDITAR </a>
+                                    <a class="btn btn-info" role="button"  href="personal?metodo=busca&id=<%= x.getIdpersonal() %>">EDITAR </a>
                                 </td>  
                                 <td>
-                                      <a href="personal?metodo=elimina&id=<%= x.getIdpersonal() %>">ELIMINAR </a>
+                                      <a a class="btn btn-danger" role="button" href="personal?metodo=elimina&id=<%= x.getIdpersonal() %>">ELIMINAR </a>
                                 </td>
                                 
                             </tr>
@@ -162,7 +172,7 @@
 
                                 </table>
 			</div>
-	<a href="registroUsuario.jsp"><input type="button" name="registroUsuario" value="Agregar Usuario"></a>
+	<a href="registroUsuario.jsp"><input class="btn btn-success" type="button" name="registroUsuario" value="Agregar Usuario"></a>
          </aside>
         
         </div>
