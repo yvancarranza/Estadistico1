@@ -12,12 +12,13 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Manejo de Errores de Base de Datos</h1>
-        <% String message = (String)request.getAttribute("alertMsg");%>        
-        <h4> ${alertMsg}</h4>
+        <h4>
+            <div>                
+                <a href="index.jsp">
+                    <img src="estilos/imagenes/mantenimiento.jpg" width="" height="" > 
+                </a>
+                
+            </div>
+        </h4>        
     </body>
-    <script type="text/javascript">
-        var msg = "<%=message%>";
-        alert(msg);
-    </script>
 </html>

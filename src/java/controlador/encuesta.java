@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -98,21 +99,50 @@ public class encuesta extends HttpServlet {
          
         try{
             String csv = uploadFile(request,"csvFile");
+             int indexpos = csv.lastIndexOf(".");
+             String sExtension = csv.substring(indexpos+1);
             request.setAttribute("fileupload",csv);
             
-      //      if(!csv.equalsIgnoreCase("csv"))
-        //    {
-          //       request.getRequestDispatcher("/importarEncuesta.jsp").forward(request, response);
-           // }
-           // else
-            //{
+            if(!sExtension.equalsIgnoreCase("csv"))
+            {
+                request.setAttribute("variable_importar", "Archivo seleccionado : " + csv.trim() + " no tiene el formato correcto");
+                request.getRequestDispatcher("/importarEncuesta.jsp").forward(request, response);
+            }
+            else
+            {
                 String csvPath = request.getServletContext().getRealPath("") 
                                  + File.separator
                                  + UPLOAD_DIR
                                  + File.separator
                                  + csv;            
                 
-                
+                String archCSV = csvPath;
+                // Validar estructura del archivo importado
+                CSVReader csvReader0 = new CSVReader(new InputStreamReader(new FileInputStream(archCSV), "UTF-8"));
+                String[] fila0 = null;
+                String celda11 = "";
+                int numreg = 0;
+                while((fila0 = csvReader0.readNext()) != null) {
+                        if(numreg == 0)
+                        {
+                          celda11 = fila0[0];
+                           break;
+                        }               
+                    }                
+                csvReader0.close();  
+                String sCompare0 = "Variable / Field Name";
+                int largo_celda = celda11.length();
+                String sCompare1 = "";
+                if (largo_celda < 22){
+                    sCompare1 = "ERROR";
+                }else{
+                    sCompare1 = celda11.substring(1,22);
+                }
+                if(!sCompare1.equalsIgnoreCase(sCompare0)){
+                    request.setAttribute("variable_importar", "Archivo seleccionado : " + csv.trim() + " no contiene columnas de la estructura definida");
+                    request.getRequestDispatcher("/importarEncuesta.jsp").forward(request, response);
+                    
+                }else{                
                 ModelPregunta modelp = new ModelPregunta();
                 modelp.eliminaPreguntaMasivo();
                 
@@ -122,10 +152,10 @@ public class encuesta extends HttpServlet {
                 /*ModelEncuesta modele = new ModelEncuesta();
                 modele.eliminaEncuestaMasivo();
                 */                         
-            String archCSV = csvPath;
+
             CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(archCSV), "UTF-8"));
             String[] fila = null;
-            int numreg = 0;
+            numreg = 0;
             while((fila = csvReader.readNext()) != null)
             {
                 if(numreg == 0)
@@ -239,7 +269,9 @@ public class encuesta extends HttpServlet {
                      }                
                   }
                 }
-            csvReader.close();           
+            csvReader.close();
+                }
+            } // Fin Analizando la extensión del archivo importado
         } catch(Exception e) {
             System.err.println(e.getMessage());      
             request.getRequestDispatcher("/cargaFallida.jsp").forward(request, response);     
@@ -258,22 +290,49 @@ public class encuesta extends HttpServlet {
          
         try{
             String csv = uploadFile(request,"csvFile");
-      //      if(!csv.equalsIgnoreCase("csv"))
-        //    {
-          //       request.getRequestDispatcher("/importarEncuesta.jsp").forward(request, response);
-           // }
-           // else
-            //{
+             int indexpos = csv.lastIndexOf(".");
+             String sExtension = csv.substring(indexpos+1);            
+            if(!sExtension.equalsIgnoreCase("csv"))
+              {
+                request.setAttribute("variable_importar", "Archivo seleccionado : " + csv.trim() + " no tiene el formato correcto");
+                request.getRequestDispatcher("/importarEncuesta.jsp").forward(request, response);
+              }
+            else
+            {
                 String csvPath = request.getServletContext().getRealPath("") 
                                  + File.separator
                                  + UPLOAD_DIR
                                  + File.separator
                                  + csv;            
                 request.setAttribute("fileupload",csv);
+                String archCSV = csvPath;
+                CSVReader csvReader0 = new CSVReader(new InputStreamReader(new FileInputStream(archCSV), "UTF-8"));
+                String[] fila0 = null;
+                String celda11 = "";
+                int numreg = 0;
+                while((fila0 = csvReader0.readNext()) != null) {
+                        if(numreg == 0)
+                        {
+                          celda11 = fila0[0];
+                           break;
+                        }               
+                    }                
+                csvReader0.close();
+                String sCompare0 = "record_id";
+                int largo_celda = celda11.length();
+                String sCompare1 = "";
+                if (largo_celda < 10){
+                    sCompare1 = "ERROR";
+                }else{
+                    sCompare1 = celda11.substring(1,10);
+                }
+                if(!(sCompare1.equalsIgnoreCase(sCompare0))){
+                    request.setAttribute("variable_importar", "Archivo seleccionado : " + csv.trim() + " no contiene columnas de la estructura definida");
+                    request.getRequestDispatcher("/importarEncuesta.jsp").forward(request, response);
+                }else{                
                 ModelEncuesta modele = new ModelEncuesta();
                 modele.eliminaEncuestaMasivo();
-                int numreg;
-                String archCSV = csvPath;
+                numreg = 0;                
                 CSVReader csvReader = new CSVReader(new InputStreamReader(new FileInputStream(archCSV), "UTF-8"));
                 String[] fila = null;
                 fila = null;
@@ -308,7 +367,9 @@ public class encuesta extends HttpServlet {
                          numreg++;
                         }            
                    }
-                   csvReader.close();                   
+                   csvReader.close(); 
+                }
+            }
          } catch(Exception e) {
             System.err.println(e.getMessage());      
             request.getRequestDispatcher("/cargaFallida.jsp").forward(request, response);     

@@ -122,6 +122,7 @@
              </div>
              
             <div>
+                
                 <form method="post" enctype="multipart/form-data"                                
                                 action= "${pageContext.request.contextPath}/encuesta?metodo=importarDiccionario">
                     <table style="width:50%;border: 1px solid black">
@@ -143,7 +144,9 @@
                         </tr>
                    </table>
                 </form>
+                    
                 <br>
+                
                  <form method="post" enctype="multipart/form-data"                                
                                 action= "${pageContext.request.contextPath}/encuesta?metodo=importarEncuesta">
                     <table style="width:50%;border: 1px solid black">
@@ -165,9 +168,10 @@
                         </tr>
                    </table>
                 </form>
-                                          
-                                
             </div>
+                    <h4>
+                        <h4 style="color:Tomato;">${variable_importar}</h4>                        
+                    </h4>
 	</aside>
         
         </div>
